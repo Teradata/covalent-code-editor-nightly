@@ -379,8 +379,11 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
             <body style="height:100%;width: 100%;margin: 0;padding: 0;overflow: hidden;">
             <div id="${this._editorInnerContainer}" style="width:100%;height:100%;${this._editorStyle}"></div>
             <script>
+                // Save off the node require so can use later after AmdRequires takes over
+                var nodeRequire = require;
                 // Get the ipcRenderer of electron for communication
-                const {ipcRenderer} = require('electron');
+                const {ipcRenderer} = nodeRequire('electron');
+                var monacoLanguageClient;
             </script>
             <script src="file://${this._editorNodeModuleDirOverride}/assets/monaco/vs/loader.js"></script>
             <script>
@@ -403,6 +406,9 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
                     editor.getModel().onDidChangeContent( (e)=> {
                         ipcRenderer.sendToHost("onEditorContentChange", editor.getValue());
                     });
+
+                    monacoLanguageClient = nodeRequire('monaco-languageclient');
+
                     ipcRenderer.sendToHost("onEditorInitialized", '');
                 });
 
@@ -513,9 +519,9 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
         // take the html content for the webview and base64 encode it and use as the src tag
         this._webview.setAttribute('src', 'data:text/html;base64,' + window.btoa(editorHTML));
         this._webview.setAttribute('style', 'display:inline-flex; width:100%; height:100%');
-        //  this._webview.addEventListener('dom-ready', () => {
-        //     this._webview.openDevTools();
-        //  });
+          // this._webview.addEventListener('dom-ready', () => {
+          //   this._webview.openDevTools();
+          // });
 
         // Process the data from the webview
         this._webview.addEventListener('ipc-message', (event: any) => {
