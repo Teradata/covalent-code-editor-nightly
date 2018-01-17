@@ -8,7 +8,11 @@
       "root": "src",
       "outDir": "dist",
       "assets": [
-        { "glob": "**/*", "input": "../node_modules/monaco-editor/min", "output": "./assets/monaco/" }
+        { "glob": "**/*", "input": "../node_modules/monaco-editor/min", "output": "./assets/monaco/" },
+        { "glob": "**/*", "input": "../node_modules/monaco-languageclient", "output": "./assets/monaco-languageclient/" },
+        { "glob": "**/*", "input": "../node_modules/vscode-ws-jsonrpc", "output": "./assets/vscode-ws-jsonrpc/" },
+        { "glob": "**/*", "input": "../node_modules/vscode-languageserver-types", "output": "./assets/vscode-languageserver-types/" },
+        { "glob": "**/*", "input": "../node_modules/reconnecting-websocket", "output": "./assets/reconnecting-websocket/" }
       ],
       "index": "index.html",
       "main": "main.ts",
