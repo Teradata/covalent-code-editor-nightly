@@ -5,7 +5,8 @@
     "outDir": "../out-tsc/app",
     "module": "es2015",
     "types": [
-      "hammerjs"
+      "hammerjs",
+      "monaco"
     ]
   },
   "exclude": [
