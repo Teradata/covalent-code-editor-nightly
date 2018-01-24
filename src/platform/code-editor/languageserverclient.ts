@@ -21,7 +21,7 @@ export function Initialize(editor: any, languageId: string): void {
         debug: false,
     };
     console.log('Creating websocket');
-    let webSocket: any = new ReconnectingWebSocket(url, undefined, socketOptions);
+    const webSocket: WebSocket = new ReconnectingWebSocket(url, undefined, socketOptions);
 
     // Listen for connect event. Once connected, create the language client
     listen({

@@ -17,7 +17,7 @@
       "../node_modules/monaco-editor-core"
     ],
     "types": [
-      "jasmine", "hammerjs", "rxjs", "monaco"
+      "jasmine", "hammerjs", "rxjs"
     ],
     "noUnusedParameters": false,
     "noUnusedLocals": false,
