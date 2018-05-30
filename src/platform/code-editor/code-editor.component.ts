@@ -626,14 +626,14 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
     const that: TdCodeEditorComponent = this;
     this._editor.addAction({
         // An unique identifier of the contributed action.
-        id: 'my-unique-id',
+        id: 'fullScreen',
        // A label of the action that will be presented to the user.
-        label: 'My Label!!!',
+        label: 'Full Screen',
         // An optional array of keybindings for the action.
-        precondition: undefined,
-        // A rule to evaluate on top of the precondition in order to dispatch the keybindings.
-        keybindingContext: undefined,
         contextMenuGroupId: 'navigation',
+        keybindings: [
+            monaco.KeyCode.F11,
+        ],    
         contextMenuOrder: 1.5,
         // Method that will be executed when the action is triggered.
         // @param editor The editor instance is passed in as a convinience
