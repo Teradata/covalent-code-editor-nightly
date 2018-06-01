@@ -633,7 +633,7 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
         contextMenuGroupId: 'navigation',
         keybindings: [
             monaco.KeyCode.F11,
-        ],    
+        ],
         contextMenuOrder: 1.5,
         // Method that will be executed when the action is triggered.
         // @param editor The editor instance is passed in as a convinience
