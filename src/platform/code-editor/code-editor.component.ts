@@ -591,12 +591,19 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
     return loadPromise;
   }
 
-  showFullScreenEditor(): void {
+ /**
+  * showFullScreenEditor request for full screen of Code Editor based on its browser type.
+  */
+  private showFullScreenEditor(): void {
     const codeEditorElement: HTMLDivElement = this._editorContainer.nativeElement as HTMLDivElement;
     const fullScreenMap: Object = {
+       // Chrome
       'requestFullscreen': () => codeEditorElement.requestFullscreen(),
+       // Safari
       'webkitRequestFullscreen': () => codeEditorElement.webkitRequestFullscreen(),
+       // IE
       'msRequestFullscreen': () => (<any>codeEditorElement).msRequestFullscreen(),
+       // Firefox
       'mozRequestFullScreen': () => (<any>codeEditorElement).mozRequestFullScreen(),
     };
 
@@ -607,11 +614,18 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
     }
   }
 
-  exitFullScreenEditor(): void {
+  /**
+   * showFullScreenEditor request to exit full screen of Code Editor based on its browser type.
+   */
+  private exitFullScreenEditor(): void {
     const exitFullScreenMap: object = {
+      // Chrome
       'exitFullscreen': () => document.exitFullscreen(),
+      // Safari
       'webkitExitFullscreen': () => document.webkitExitFullscreen(),
+      // Firefox
       'mozCancelFullScreen': () => (<any>document).mozCancelFullScreen(),
+      // IE
       'msExitFullscreen': () => (<any>document).msExitFullscreen(),
     };
 
@@ -622,8 +636,7 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
     }
   }
 
-  addFullScreenModeCommand(): void {
-    const that: TdCodeEditorComponent = this;
+  private addFullScreenModeCommand(): void {
     this._editor.addAction({
         // An unique identifier of the contributed action.
         id: 'fullScreen',
@@ -637,8 +650,8 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
         contextMenuOrder: 1.5,
         // Method that will be executed when the action is triggered.
         // @param editor The editor instance is passed in as a convinience
-        run: function(ed: any): void {
-            that.showFullScreenEditor();
+        run: (ed: any) => {
+            this.showFullScreenEditor();
         },
     });
   }
