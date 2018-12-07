@@ -594,7 +594,7 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
  /**
   * showFullScreenEditor request for full screen of Code Editor based on its browser type.
   */
-  private showFullScreenEditor(): void {
+  public showFullScreenEditor(): void {
     const codeEditorElement: HTMLDivElement = this._editorContainer.nativeElement as HTMLDivElement;
     const fullScreenMap: Object = {
        // Chrome
@@ -609,15 +609,15 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
 
     for (const handler of Object.keys(fullScreenMap)) {
       if (codeEditorElement[handler]) {
-        fullScreenMap[handler]();
+          fullScreenMap[handler]();
       }
     }
   }
 
   /**
-   * showFullScreenEditor request to exit full screen of Code Editor based on its browser type.
+   * exitFullScreenEditor request to exit full screen of Code Editor based on its browser type.
    */
-  private exitFullScreenEditor(): void {
+  public exitFullScreenEditor(): void {
     const exitFullScreenMap: object = {
       // Chrome
       'exitFullscreen': () => document.exitFullscreen(),
@@ -631,12 +631,16 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
 
     for (const handler of Object.keys(exitFullScreenMap)) {
       if (document[handler]) {
-        exitFullScreenMap[handler]();
+          exitFullScreenMap[handler]();
       }
     }
   }
 
-  private addFullScreenModeCommand(): void {
+  public getEditor(): any {
+    return this._editor;
+  }
+
+  public addFullScreenModeCommand(): void {
     this._editor.addAction({
         // An unique identifier of the contributed action.
         id: 'fullScreen',
