@@ -10,9 +10,10 @@
 
 | Name | Description |
 | --- | --- |
-| `onEditorInitialized` | Emitted when Editor is finished initializing
+| `editorInitialized` | Emitted when Editor is finished initializing and this will expose editor instance that can be used for performing custom operations on the editor.
 | `onEditorConfigurationChanged` | Emitted when configuration of the Editor changes
 | `onEditorLanguageChanged` | Emitted when the language of the Editor changes
+
 
 ### Properties
 
@@ -49,6 +50,26 @@ Example for HTML usage:
         [(ngModel)]="model"
         (change)="callBackFunc()">
 </td-code-editor>
+```
+Example of exposing editor instance
+
+```html
+<td-code-editor
+        [editorOptions]="editorOptions"
+        [(ngModel)]="model"
+        (editorInitialized)="onInit($event)">
+</td-code-editor>
+```
+
+```typescript
+export class AppComponent {
+  editorOptions = {theme: 'vs-dark', language: 'javascript'};
+  model: string= 'function x() {\nconsole.log("Hello world!");\n}';
+  onInit(editor) {
+      let line = editor.getPosition();
+      console.log(line);
+  }
+}
 ```
 
 ---
