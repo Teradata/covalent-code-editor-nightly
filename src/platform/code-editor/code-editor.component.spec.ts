@@ -251,9 +251,9 @@ describe('Component: App', () => {
           } else {
             spyOn(containerDiv, 'webkitRequestFullscreen');
             component.showFullScreenEditor();
-            expect(containerDiv.webkitRequestFullscreen).toHaveBeenCalled();
+            expect(<any>containerDiv.webkitRequestFullscreen).toHaveBeenCalled();
             component.exitFullScreenEditor();
-            expect(document.webkitExitFullscreen).toBeDefined();
+            expect(<any>document.webkitExitFullscreen).toBeDefined();
           }
 
           done();

@@ -25,8 +25,7 @@
             ],
             "styles": [],
             "scripts": [
-              "node_modules/hammerjs/hammer.min.js",
-              "node_modules/showdown/dist/showdown.js"
+              "node_modules/hammerjs/hammer.min.js"
             ]
           },
           "configurations": {
@@ -76,8 +75,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [
-              "node_modules/hammerjs/hammer.min.js",
-              "node_modules/showdown/dist/showdown.js"
+              "node_modules/hammerjs/hammer.min.js"
             ],
             "styles": [],
             "assets": [
@@ -112,14 +110,22 @@
             "protractorConfig": "./protractor.conf.js",
             "devServerTarget": "covalent:serve"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+        }
+      }
+    },
+    "covalent-code-editor": {
+      "root": "src",
+      "sourceRoot": "src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": [],
-            "exclude": []
+            "project": "src/platform/code-editor/ng-package.js"
           }
         }
+
       }
     }
   },
