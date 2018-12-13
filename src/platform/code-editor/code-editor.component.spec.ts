@@ -229,52 +229,7 @@ describe('Component: App', () => {
     })();
   });
 
-  it('should add fullscreen command in context menu', () => {
-    inject([], () => {
-      let fixture: ComponentFixture<any> = TestBed.createComponent(TdCodeEditorComponent);
-      let component: TdCodeEditorComponent = fixture.debugElement.componentInstance;
-      if (component.isElectronApp) {
-        component.setEditorNodeModuleDirOverride(electron.remote.process.env.NODE_MODULE_DIR);
-      }
-      fixture.changeDetectorRef.detectChanges();
-      fixture.detectChanges();
-      fixture.whenStable().then(() => {
-        component.onEditorInitialized.subscribe(() => {
-          spyOn(component.getEditor(), 'addAction');
-
-          component.addFullScreenModeCommand();
-
-          expect(component.getEditor().addAction).toHaveBeenCalled();
-        });
-      });
-    })();
-  });
-
-  it('should exit fullscreen mode', (done: DoneFn) => {
-    inject([], () => {
-      let fixture: ComponentFixture<any> = TestBed.createComponent(TdCodeEditorComponent);
-      let component: TdCodeEditorComponent = fixture.debugElement.componentInstance;
-      if (component.isElectronApp) {
-        component.setEditorNodeModuleDirOverride(electron.remote.process.env.NODE_MODULE_DIR);
-      }
-      fixture.changeDetectorRef.detectChanges();
-      fixture.detectChanges();
-      fixture.whenStable().then(() => {
-        component.onEditorInitialized.subscribe(() => {
-          component.editorStyle = 'width:100%;height:500px;border:10px solid green;';
-
-          component.value = 'SELECT * FROM foo;';
-
-          component.exitFullScreenEditor();
-
-          expect(document.webkitExitFullscreen).toBeDefined();
-          done();
-        });
-      });
-    })();
-  });
-
-  it('should show editor in fullscreen mode', (done: DoneFn) => {
+  it('should show editor in fullscreen mode and then unset fullscreen mode', (done: DoneFn) => {
     inject([], () => {
       let fixture: ComponentFixture<any> = TestBed.createComponent(TdCodeEditorComponent);
       let component: TdCodeEditorComponent = fixture.debugElement.componentInstance;
@@ -288,11 +243,19 @@ describe('Component: App', () => {
           component.editorStyle = 'width:100%;height:500px;border:10px solid green;';
           component.value = 'SELECT * FROM foo;';
           let containerDiv: HTMLDivElement = component._editorContainer.nativeElement;
-          spyOn(containerDiv, 'webkitRequestFullscreen');
+          if (component.isElectronApp) {
+            component.showFullScreenEditor();
+            expect(component.isFullScreen).toBe(true);
+            component.exitFullScreenEditor();
+            expect(component.isFullScreen).toBe(false);
+          } else {
+            spyOn(containerDiv, 'webkitRequestFullscreen');
+            component.showFullScreenEditor();
+            expect(containerDiv.webkitRequestFullscreen).toHaveBeenCalled();
+            component.exitFullScreenEditor();
+            expect(document.webkitExitFullscreen).toBeDefined();
+          }
 
-          component.showFullScreenEditor();
-
-          expect(containerDiv.webkitRequestFullscreen).toHaveBeenCalled();
           done();
         });
       });

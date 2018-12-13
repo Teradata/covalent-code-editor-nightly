@@ -28,7 +28,11 @@
 | `automaticLayout` | `boolean` | Implemented via setInterval that constantly probes for the container's size. Defaults to false.
 | `editorOptions` | `Object` | Editor Options Object of valid Configurations listed here: <a href="https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditoroptions.html">https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditoroptions.html</a>
 | `layout` | `function()` | Instructs the editor to remeasure its container
-| `isElectronApp` | `function()` | Returns true or false based on if running in Electron
+| `showFullScreenEditor` | `function()` | Instructs the editor to be in full screen mode
+| `exitFullScreenEditor` | `function()` | Instructs the editor exit full screen mode
+| `isFullScreen` | `boolean` | Is the editor currently in Full Screen mode
+| `fullscreenKeyBinding` | `number` | Sets the KeyCode for shortcutting to Fullscreen.  Options listed see here:
+<a href="https://microsoft.github.io/monaco-editor/api/enums/monaco.keycode.html">https://microsoft.github.io/monaco-editor/api/enums/monaco.keycode.html</a>
 
 
 ### Usage
