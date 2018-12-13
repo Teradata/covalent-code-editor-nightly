@@ -10,6 +10,14 @@ import { TdCodeEditorComponent } from './';
 declare var electron: any;
 declare const process: any;
 
+// to be able to test fullscreen when running headless in travis
+interface IFsDocument extends HTMLDocument {
+  webkitExitFullscreen?: () => void;
+}
+interface IFsDocumentElement extends HTMLDivElement {
+  webkitRequestFullscreen?: () => void;
+}
+
 describe('Component: App', () => {
 
   beforeEach(async(() => {
@@ -242,7 +250,7 @@ describe('Component: App', () => {
         component.onEditorInitialized.subscribe(() => {
           component.editorStyle = 'width:100%;height:500px;border:10px solid green;';
           component.value = 'SELECT * FROM foo;';
-          let containerDiv: HTMLDivElement = component._editorContainer.nativeElement;
+          let containerDiv: IFsDocumentElement = <IFsDocumentElement>component._editorContainer.nativeElement;
           if (component.isElectronApp) {
             component.showFullScreenEditor();
             expect(component.isFullScreen).toBe(true);
@@ -251,9 +259,10 @@ describe('Component: App', () => {
           } else {
             spyOn(containerDiv, 'webkitRequestFullscreen');
             component.showFullScreenEditor();
-            expect(<any>containerDiv.webkitRequestFullscreen).toHaveBeenCalled();
+            expect(containerDiv.webkitRequestFullscreen).toHaveBeenCalled();
             component.exitFullScreenEditor();
-            expect(<any>document.webkitExitFullscreen).toBeDefined();
+            let fsDoc: IFsDocument = <IFsDocument>document;
+            expect(fsDoc).toBeDefined();
           }
 
           done();
