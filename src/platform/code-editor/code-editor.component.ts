@@ -320,15 +320,15 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
   }
 
   /**
-   * fullscreenKeyBinding?: number
+   * fullScreenKeyBinding?: number
    * See here for key bindings https://microsoft.github.io/monaco-editor/api/enums/monaco.keycode.html
    * Sets the KeyCode for shortcutting to Fullscreen mode
    */
-  @Input('fullscreenKeyBinding')
-  set fullscreenKeyBinding(keycode: number[]) {
+  @Input('fullScreenKeyBinding')
+  set fullScreenKeyBinding(keycode: number[]) {
     this._keycode = keycode;
   }
-  get fullscreenKeyBinding(): number[] {
+  get fullScreenKeyBinding(): number[] {
     return this._keycode;
   }
 
@@ -439,13 +439,29 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
                       label: 'Full Screen',
                       // An optional array of keybindings for the action.
                       contextMenuGroupId: 'navigation',
-                      keybindings: ${this._keycode},
+                      keybindings: [${this._keycode}],
                       contextMenuOrder: 1.5,
                       // Method that will be executed when the action is triggered.
                       // @param editor The editor instance is passed in as a convinience
                       run: function(ed) {
                         var editorDiv = document.getElementById('${this._editorInnerContainer}');
-                        editorDiv.requestFullscreen();
+                        editorDiv.webkitRequestFullscreen();
+                      }
+                    });
+                    editor.addAction({
+                      // An unique identifier of the contributed action.
+                      id: 'exitfullScreen',
+                      // A label of the action that will be presented to the user.
+                      label: 'Exit Full Screen',
+                      // An optional array of keybindings for the action.
+                      contextMenuGroupId: 'navigation',
+                      keybindings: [9],
+                      contextMenuOrder: 1.5,
+                      // Method that will be executed when the action is triggered.
+                      // @param editor The editor instance is passed in as a convinience
+                      run: function(ed) {
+                        var editorDiv = document.getElementById('${this._editorInnerContainer}');
+                        document.webkitExitFullscreen();
                       }
                     });
                     ipcRenderer.sendToHost("onEditorInitialized", '');
@@ -541,13 +557,13 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
                 // Instruct the editor go to full screen mode
                 ipcRenderer.on('showFullScreenEditor', function() {
                   var editorDiv = document.getElementById('${this._editorInnerContainer}');
-                  editorDiv.requestFullscreen();
+                  editorDiv.webkitRequestFullscreen();
                 });
 
                 // Instruct the editor exit full screen mode
                 ipcRenderer.on('exitFullScreenEditor', function() {
                   var editorDiv = document.getElementById('${this._editorInnerContainer}');
-                  editorDiv.exitFullscreen();
+                  editorDiv.webkitExitFullscreen();
                 });
 
                 // need to manually resize the editor any time the window size
