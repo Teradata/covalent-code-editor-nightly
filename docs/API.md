@@ -10,7 +10,7 @@
 
 | Name | Description |
 | --- | --- |
-| `editorInitialized` | Emitted when Editor is finished initializing and this will expose editor instance that can be used for performing custom operations on the editor.
+| `editorInitialized` | Emitted when Editor is finished initializing and this will output editor instance that can be used to call additional operations directly on Editor outside of Angular component
 | `onEditorConfigurationChanged` | Emitted when configuration of the Editor changes
 | `onEditorLanguageChanged` | Emitted when the language of the Editor changes
 
