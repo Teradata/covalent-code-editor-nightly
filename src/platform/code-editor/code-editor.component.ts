@@ -464,7 +464,7 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
                         document.webkitExitFullscreen();
                       }
                     });
-                    ipcRenderer.sendToHost("onEditorInitialized", '');
+                    ipcRenderer.sendToHost("onEditorInitialized", this._editor);
                 });
 
                 // return back the value in the editor to the mainview
@@ -602,7 +602,7 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
                 this._fromEditor = true;
                 this.writeValue(event.args[0]);
             } else if (event.channel === 'onEditorInitialized') {
-                this.onEditorInitialized.emit(undefined);
+                this.onEditorInitialized.emit(this._editor);
             } else if (event.channel === 'onEditorConfigurationChanged') {
                 this.onEditorConfigurationChanged.emit(undefined);
             } else if (event.channel === 'onEditorLanguageChanged') {
@@ -756,7 +756,7 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
         automaticLayout: this._automaticLayout,
     }, this.editorOptions));
     setTimeout(() => {
-        this.onEditorInitialized.emit(undefined);
+        this.onEditorInitialized.emit(this._editor);
     });
     this._editor.getModel().onDidChangeContent( (e: any) => {
         this._fromEditor = true;
