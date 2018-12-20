@@ -281,8 +281,12 @@ describe('Component: App', () => {
       fixture.changeDetectorRef.detectChanges();
       fixture.detectChanges();
       fixture.whenStable().then(() => {
-        component.onEditorInitialized.subscribe((editorInstance: any) => {
+        component.onEditorInitialized.subscribe(async (editorInstance: any) => {
           expect(editorInstance).toBeDefined();
+          let line: any = await editorInstance.getPosition();
+
+          expect(line.column).toBe(1);
+          expect(line.lineNumber).toBe(1);
           done();
         });
       });
