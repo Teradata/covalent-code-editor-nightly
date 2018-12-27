@@ -39,7 +39,7 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
   private _subject: Subject<string> = new Subject();
   private _editorInnerContainer: string = 'editorInnerContainer' + uniqueCounter++;
   private _editorNodeModuleDirOverride: string = '';
-  private _editor: any = {};
+  private _editor: any;
   private _editorProxy: any;
   private _componentInitialized: boolean = false;
   private _fromEditor: boolean = false;
