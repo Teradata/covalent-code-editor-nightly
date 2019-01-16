@@ -47,6 +47,7 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
   private _editorOptions: any = {};
   private _isFullScreen: boolean = false;
   private _keycode: any;
+  private _setValueTimeout: any;
 
   @ViewChild('editorContainer') _editorContainer: ElementRef;
 
@@ -103,6 +104,10 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
    */
   @Input('value')
   set value(value: string) {
+    // Clear any timeout that might overwrite this value set in the future
+    if (this._setValueTimeout) {
+        clearTimeout(this._setValueTimeout);
+    }
     this._value = value;
     if (this._componentInitialized) {
         if (this._webview) {
@@ -117,7 +122,7 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
                 this._fromEditor = false;
             } else {
                 // Editor is not loaded yet, try again in half a second
-                setTimeout(() => {
+                this._setValueTimeout = setTimeout(() => {
                     this.value = value;
                 }, 500);
             }
@@ -134,7 +139,7 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
                 this.zone.run(() => this._value = value);
             } else {
               // Editor is not loaded yet, try again in half a second
-              setTimeout(() => {
+              this._setValueTimeout = setTimeout(() => {
                 this.value = value;
               }, 500);
             }
