@@ -614,6 +614,7 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
         this._webview.addEventListener('ipc-message', (event: any) => {
             if (event.channel === 'editorContent') {
               this._fromEditor = true;
+              this.writeValue(event.args[0]);
               this._subject.next(this._value);
               this._subject.complete();
               this._subject = new Subject();
