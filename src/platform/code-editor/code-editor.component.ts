@@ -144,6 +144,10 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
               }, 500);
             }
         }
+    } else {
+        this._setValueTimeout = setTimeout(() => {
+            this.value = value;
+        }, 500);
     }
   }
 
@@ -155,7 +159,11 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
    * Implemented as part of ControlValueAccessor.
    */
   writeValue(value: any): void {
-    this.value = value;
+    // do not write if null or undefined
+    // tslint:disable-next-line
+    if ( value != undefined) {
+      this.value = value;
+    }
   }
   registerOnChange(fn: any): void {
     this.propagateChange = fn;
@@ -606,7 +614,6 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
         this._webview.addEventListener('ipc-message', (event: any) => {
             if (event.channel === 'editorContent') {
               this._fromEditor = true;
-              this.writeValue(event.args[0]);
               this._subject.next(this._value);
               this._subject.complete();
               this._subject = new Subject();
@@ -614,6 +621,7 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
               this._fromEditor = true;
               this.writeValue(event.args[0]);
             } else if (event.channel === 'onEditorInitialized') {
+              this._componentInitialized = true;
               this._editorProxy = this.wrapEditorCalls(this._editor);
               this.onEditorInitialized.emit(this._editorProxy);
             } else if (event.channel === 'onEditorConfigurationChanged') {
@@ -626,7 +634,6 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
         // append the webview to the DOM
         this._editorContainer.nativeElement.appendChild(this._webview);
     }
-    this._componentInitialized = true;
   }
 
   /**
@@ -806,6 +813,7 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
     }, this.editorOptions));
     setTimeout(() => {
         this._editorProxy = this.wrapEditorCalls(this._editor);
+        this._componentInitialized = true;
         this.onEditorInitialized.emit(this._editorProxy);
     });
     this._editor.getModel().onDidChangeContent( (e: any) => {
