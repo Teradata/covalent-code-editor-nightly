@@ -326,7 +326,6 @@ describe('Component: App', () => {
     })();
   });
 
-
   it('should work with 2 way binding via ngModel', (done: DoneFn) => {
     inject([], () => {
       let fixture: ComponentFixture<any> = TestBed.createComponent(TestTwoWayBindingWithNgModelComponent);
