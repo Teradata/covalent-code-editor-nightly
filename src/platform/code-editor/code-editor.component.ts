@@ -792,6 +792,7 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
               // since running javascript code manually need to force Angular to detect changes
               setTimeout(() => {
                 that.zone.run(() => {
+                    // tslint:disable-next-line
                     if (!that._changeDetectorRef['destroyed']) {
                         that._changeDetectorRef.detectChanges();
                     }
