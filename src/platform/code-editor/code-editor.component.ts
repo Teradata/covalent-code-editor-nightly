@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit,
-  ViewChild, ElementRef, forwardRef, NgZone, ChangeDetectorRef } from '@angular/core';
+  ViewChild, ElementRef, forwardRef, NgZone, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 
@@ -27,7 +27,7 @@ declare const process: any;
     multi: true,
   }],
 })
-export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValueAccessor {
+export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValueAccessor, OnDestroy {
 
   private _editorStyle: string = 'width:100%;height:100%;border:1px solid grey;';
   private _appPath: string = '';
@@ -678,6 +678,10 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
     }
   }
 
+  ngOnDestroy(): void {
+    this._changeDetectorRef.detach();
+  }
+
   /**
    * waitForMonaco method Returns promise that will be fulfilled when monaco is available
    */
@@ -787,7 +791,11 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
               let result: any = await origMethod.apply(that._editor, args);
               // since running javascript code manually need to force Angular to detect changes
               setTimeout(() => {
-                that.zone.run(() => that._changeDetectorRef.detectChanges());
+                that.zone.run(() => {
+                    if (!that._changeDetectorRef['destroyed']) {
+                        that._changeDetectorRef.detectChanges();
+                    }
+                });
               });
               return result;
             }
