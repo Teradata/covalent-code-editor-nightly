@@ -48,6 +48,7 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
   private _isFullScreen: boolean = false;
   private _keycode: any;
   private _setValueTimeout: any;
+  private initialContentChange: boolean = true;
 
   @ViewChild('editorContainer') _editorContainer: ElementRef;
 
@@ -621,6 +622,10 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
             } else if (event.channel === 'onEditorContentChange') {
               this._fromEditor = true;
               this.writeValue(event.args[0]);
+              if (this.initialContentChange) {
+                this.initialContentChange = false;
+                this.layout();
+            }
             } else if (event.channel === 'onEditorInitialized') {
               this._componentInitialized = true;
               this._editorProxy = this.wrapEditorCalls(this._editor);
@@ -829,11 +834,15 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
     this._editor.getModel().onDidChangeContent( (e: any) => {
         this._fromEditor = true;
         this.writeValue(this._editor.getValue());
+        if (this.initialContentChange) {
+            this.initialContentChange = false;
+            this.layout();
+        }
     });
     // need to manually resize the editor any time the window size
     // changes. See: https://github.com/Microsoft/monaco-editor/issues/28
     window.addEventListener('resize', () => {
-        this._editor.layout();
+        this.layout();
     });
     this.addFullScreenModeCommand();
   }
