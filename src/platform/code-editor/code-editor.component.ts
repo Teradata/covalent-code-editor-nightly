@@ -2,6 +2,8 @@ import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit,
   ViewChild, ElementRef, forwardRef, NgZone, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
+import { fromEvent, merge, timer } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 const noop: any = () => {
   // empty method
@@ -28,6 +30,10 @@ declare const process: any;
   }],
 })
 export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValueAccessor, OnDestroy {
+
+  private _destroy: Subject<boolean> = new Subject<boolean>();
+  private _widthSubject: Subject<number> = new Subject<number>();
+  private _heightSubject: Subject<number> = new Subject<number>();
 
   private _editorStyle: string = 'width:100%;height:100%;border:1px solid grey;';
   private _appPath: string = '';
@@ -88,7 +94,11 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
   /**
    * Set if using Electron mode when object is created
    */
-  constructor(private zone: NgZone, private _changeDetectorRef: ChangeDetectorRef) {
+  constructor(
+    private zone: NgZone,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private _elementRef: ElementRef,
+  ) {
     // since accessing the window object need this check so serverside rendering doesn't fail
     if (typeof document === 'object' && !!document) {
         /* tslint:disable-next-line */
@@ -686,11 +696,38 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
             });
         }
     }
+    merge(
+      fromEvent(window, 'resize').pipe(
+        debounceTime(100),
+      ),
+      this._widthSubject.asObservable().pipe(
+        distinctUntilChanged(),
+      ),
+      this._heightSubject.asObservable().pipe(
+        distinctUntilChanged(),
+      ),
+    ).pipe(
+      takeUntil(this._destroy),
+      debounceTime(100),
+    ).subscribe(() => {
+      this.layout();
+      this._changeDetectorRef.markForCheck();
+    });
+    timer(500, 250).pipe(
+      takeUntil(this._destroy),
+    ).subscribe(() => {
+      if (this._elementRef && this._elementRef.nativeElement) {
+        this._widthSubject.next((<HTMLElement>this._elementRef.nativeElement).getBoundingClientRect().width);
+        this._heightSubject.next((<HTMLElement>this._elementRef.nativeElement).getBoundingClientRect().height);
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this._changeDetectorRef.detach();
     this._webview ? this._webview.send('dispose') : this._editor.dispose();
+    this._destroy.next(true);
+    this._destroy.unsubscribe();
   }
 
   /**
@@ -843,11 +880,6 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
             this.initialContentChange = false;
             this.layout();
         }
-    });
-    // need to manually resize the editor any time the window size
-    // changes. See: https://github.com/Microsoft/monaco-editor/issues/28
-    window.addEventListener('resize', () => {
-        this.layout();
     });
     this.addFullScreenModeCommand();
   }
