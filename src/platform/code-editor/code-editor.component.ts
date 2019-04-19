@@ -49,7 +49,6 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
   private _editorProxy: any;
   private _componentInitialized: boolean = false;
   private _fromEditor: boolean = false;
-  private _automaticLayout: boolean = false;
   private _editorOptions: any = {};
   private _isFullScreen: boolean = false;
   private _keycode: any;
@@ -57,6 +56,12 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
   private initialContentChange: boolean = true;
 
   @ViewChild('editorContainer') _editorContainer: ElementRef;
+
+  /**
+   * automaticLayout?: boolean
+   * @deprecated in favor of our own resize implementation.
+   */
+  @Input('automaticLayout') automaticLayout: boolean = true;
 
  /**
   * editorInitialized: function($event)
@@ -336,18 +341,6 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
   }
   get theme(): string {
     return this._theme;
-  }
-
-  /**
-   * automaticLayout?: boolean
-   * Implemented via setInterval that constantly probes for the container's size
-   */
-  @Input('automaticLayout')
-  set automaticLayout(automaticLayout: any) {
-    this._automaticLayout = automaticLayout !== '' ? (automaticLayout === 'true' || automaticLayout === true) : true;
-  }
-  get automaticLayout(): any {
-    return this._automaticLayout;
   }
 
   /**
@@ -866,7 +859,6 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
         value: this._value,
         language: this.language,
         theme: this._theme,
-        automaticLayout: this._automaticLayout,
     }, this.editorOptions));
     setTimeout(() => {
         this._editorProxy = this.wrapEditorCalls(this._editor);
