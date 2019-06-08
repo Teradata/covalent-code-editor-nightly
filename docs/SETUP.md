@@ -13,6 +13,10 @@ npm install @covalent/code-editor
         {
           "glob": "**/*",
           "input": "node_modules/monaco-editor/min",
+          /**
+           * DEPRECATED and will be removed in 3.0.0
+           * "input": "node_modules/@covalent/code-editor/assets/monaco",
+           */
           "output": "/assets/monaco"
         }
       ],
