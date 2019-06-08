@@ -61,7 +61,11 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
    * automaticLayout?: boolean
    * @deprecated in favor of our own resize implementation.
    */
-  @Input('automaticLayout') automaticLayout: boolean = true;
+  @Input('automaticLayout')
+  set automaticLayout(automaticLayout: boolean) {
+    // tslint:disable-next-line
+    console.warn('[automaticLayout] has been deprecated in favor of our own resize implementation and will be removed on 3.0.0');
+  }
 
  /**
   * editorInitialized: function($event)
