@@ -12,7 +12,7 @@ npm install @covalent/code-editor
       "assets": [
         {
           "glob": "**/*",
-          "input": "node_modules/@covalent/code-editor/assets/monaco",
+          "input": "node_modules/monaco-editor/min",
           "output": "/assets/monaco"
         }
       ],
