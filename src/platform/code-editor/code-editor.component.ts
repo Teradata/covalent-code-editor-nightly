@@ -5,6 +5,8 @@ import { Observable, Subject } from 'rxjs';
 import { fromEvent, merge, timer } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
+import { waitUntilMonacoReady } from './code-editor.utils';
+
 const noop: any = () => {
   // empty method
 };
@@ -26,8 +28,6 @@ declare const monaco: any;
   }],
 })
 export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValueAccessor, OnDestroy {
-
-  private _loadInterval: any;
 
   private _destroy: Subject<boolean> = new Subject<boolean>();
   private _widthSubject: Subject<number> = new Subject<number>();
@@ -657,16 +657,11 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
    */
   ngAfterViewInit(): void {
     if (!this._isElectronApp) {
-      // create interval to check if monaco has been loaded
-      this._loadInterval = setInterval(() => {
-        if (typeof((<any>window).monaco) === 'object') {
-          // clear interval when monaco has been loaded
-          clearInterval(this._loadInterval);
-          this._loadInterval = undefined;
-          this.initMonaco();
-          return;
-        }
-      }, 100);
+      waitUntilMonacoReady().pipe(
+        takeUntil(this._destroy),
+      ).subscribe(() => {
+        this.initMonaco();
+      });
       // check if the script tag has been created in case another code component has done this already
       if (!document.getElementById('monaco-loader-script')) {
         let onGotAmdLoader: any = () => {
@@ -718,10 +713,6 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
   }
 
   ngOnDestroy(): void {
-    // clear interval if monaco hasnt been loaded and the editor hasnt been instantiated
-    if (this._loadInterval) {
-      clearInterval(this._loadInterval);
-    }
     this._changeDetectorRef.detach();
     this._webview ? this._webview.send('dispose') : this._editor.dispose();
     this._destroy.next(true);
