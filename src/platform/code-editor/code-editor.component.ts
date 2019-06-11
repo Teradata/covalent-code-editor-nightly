@@ -657,12 +657,12 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
    */
   ngAfterViewInit(): void {
     if (!this._isElectronApp) {
+      loadMonaco();
       waitUntilMonacoReady().pipe(
         takeUntil(this._destroy),
       ).subscribe(() => {
         this.initMonaco();
       });
-      loadMonaco();
     }
     merge(
       fromEvent(window, 'resize').pipe(
