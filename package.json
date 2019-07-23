@@ -1,0 +1,51 @@
+{
+  "name": "@covalent/code-editor",
+  "version": "2.1.0",
+  "description": "Teradata UI Platform Code Editor Module",
+  "keywords": [
+    "angular",
+    "covalent",
+    "monaco",
+    "monaco-editor",
+    "code",
+    "editor",
+    "electron",
+    "reusable"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/teradata/covalent.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Teradata/covalent/issues"
+  },
+  "license": "MIT",
+  "author": "Teradata UX",
+  "contributors": [
+    "Kyle Ledbetter <kyle.ledbetter@teradata.com>",
+    "Richa Vyas <richa.vyas@teradata.com>",
+    "Ed Morales <eduardo.morales@teradata.com>",
+    "Jason Weaver <jason.weaver@teradata.com>",
+    "Jeremy Wilken <jeremy.wilken@teradata.com>",
+    "Jeremy Smartt <jeremy.smartt@teradata.com>",
+    "Steven Ov <steven.ov@teradata.com>"
+  ],
+  "dependencies": {
+    "monaco-editor": "^0.10.1",
+    "tslib": "^1.9.0"
+  },
+  "peerDependencies": {
+    "@angular/common": "^7.0.0",
+    "@angular/core": "^7.0.0"
+  },
+  "main": "bundles/covalent-code-editor.umd.js",
+  "module": "fesm5/covalent-code-editor.js",
+  "es2015": "fesm2015/covalent-code-editor.js",
+  "esm5": "esm5/covalent-code-editor.js",
+  "esm2015": "esm2015/covalent-code-editor.js",
+  "fesm5": "fesm5/covalent-code-editor.js",
+  "fesm2015": "fesm2015/covalent-code-editor.js",
+  "typings": "covalent-code-editor.d.ts",
+  "metadata": "covalent-code-editor.metadata.json",
+  "sideEffects": false
+}
