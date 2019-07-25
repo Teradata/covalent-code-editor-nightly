@@ -146,7 +146,7 @@
      * @return {?}
      */
     function isMonacoLoaded() {
-        return typeof ((( /** @type {?} */(window))).monaco) === 'object';
+        return typeof (( /** @type {?} */(window))).monaco === 'object';
     }
     /**
      * Loads monaco
@@ -158,7 +158,7 @@
             /** @type {?} */
             var onGotAmdLoader = function () {
                 // Load monaco
-                (( /** @type {?} */(window))).require.config({ paths: { 'vs': 'assets/monaco/vs' } });
+                (( /** @type {?} */(window))).require.config({ paths: { vs: 'assets/monaco/vs' } });
                 (( /** @type {?} */(window))).require(['vs/editor/editor.main'], function () {
                     // TODO
                 });
@@ -246,9 +246,12 @@
             // since accessing the window object need this check so serverside rendering doesn't fail
             if (typeof document === 'object' && !!document) {
                 /* tslint:disable-next-line */
-                this._isElectronApp = ((( /** @type {?} */(window)))['process']) ? true : false;
+                this._isElectronApp = (( /** @type {?} */(window)))['process'] ? true : false;
                 if (this._isElectronApp) {
-                    this._appPath = electron.remote.app.getAppPath().split('\\').join('/');
+                    this._appPath = electron.remote.app
+                        .getAppPath()
+                        .split('\\')
+                        .join('/');
                 }
             }
         }
@@ -320,7 +323,7 @@
                             this.propagateChange(this._value);
                             this.onChange.emit(undefined);
                             this._fromEditor = false;
-                            this.zone.run(function () { return _this._value = value; });
+                            this.zone.run(function () { return (_this._value = value); });
                         }
                         else {
                             // Editor is not loaded yet, try again in half a second
@@ -584,10 +587,10 @@
                 this._theme = theme;
                 if (this._componentInitialized) {
                     if (this._webview) {
-                        this._webview.send('setEditorOptions', { 'theme': theme });
+                        this._webview.send('setEditorOptions', { theme: theme });
                     }
                     else if (this._editor) {
-                        this._editor.updateOptions({ 'theme': theme });
+                        this._editor.updateOptions({ theme: theme });
                         this.onEditorConfigurationChanged.emit(undefined);
                     }
                 }
@@ -805,15 +808,21 @@
                 var _this = this;
                 if (!this._isElectronApp) {
                     loadMonaco();
-                    waitUntilMonacoReady().pipe(operators.takeUntil(this._destroy)).subscribe(function () {
+                    waitUntilMonacoReady()
+                        .pipe(operators.takeUntil(this._destroy))
+                        .subscribe(function () {
                         _this.initMonaco();
                     });
                 }
-                rxjs.merge(rxjs.fromEvent(window, 'resize').pipe(operators.debounceTime(100)), this._widthSubject.asObservable().pipe(operators.distinctUntilChanged()), this._heightSubject.asObservable().pipe(operators.distinctUntilChanged())).pipe(operators.takeUntil(this._destroy), operators.debounceTime(100)).subscribe(function () {
+                rxjs.merge(rxjs.fromEvent(window, 'resize').pipe(operators.debounceTime(100)), this._widthSubject.asObservable().pipe(operators.distinctUntilChanged()), this._heightSubject.asObservable().pipe(operators.distinctUntilChanged()))
+                    .pipe(operators.takeUntil(this._destroy), operators.debounceTime(100))
+                    .subscribe(function () {
                     _this.layout();
                     _this._changeDetectorRef.markForCheck();
                 });
-                rxjs.timer(500, 250).pipe(operators.takeUntil(this._destroy)).subscribe(function () {
+                rxjs.timer(500, 250)
+                    .pipe(operators.takeUntil(this._destroy))
+                    .subscribe(function () {
                     if (_this._elementRef && _this._elementRef.nativeElement) {
                         _this._widthSubject.next((( /** @type {?} */(_this._elementRef.nativeElement))).getBoundingClientRect().width);
                         _this._heightSubject.next((( /** @type {?} */(_this._elementRef.nativeElement))).getBoundingClientRect().height);
@@ -860,13 +869,13 @@
                         /** @type {?} */
                         var fullScreenMap = {
                             // Chrome
-                            'requestFullscreen': function () { return codeEditorElement_1.requestFullscreen(); },
+                            requestFullscreen: function () { return codeEditorElement_1.requestFullscreen(); },
                             // Safari
-                            'webkitRequestFullscreen': function () { return (( /** @type {?} */(codeEditorElement_1))).webkitRequestFullscreen(); },
+                            webkitRequestFullscreen: function () { return (( /** @type {?} */(codeEditorElement_1))).webkitRequestFullscreen(); },
                             // IE
-                            'msRequestFullscreen': function () { return (( /** @type {?} */(codeEditorElement_1))).msRequestFullscreen(); },
+                            msRequestFullscreen: function () { return (( /** @type {?} */(codeEditorElement_1))).msRequestFullscreen(); },
                             // Firefox
-                            'mozRequestFullScreen': function () { return (( /** @type {?} */(codeEditorElement_1))).mozRequestFullScreen(); },
+                            mozRequestFullScreen: function () { return (( /** @type {?} */(codeEditorElement_1))).mozRequestFullScreen(); },
                         };
                         try {
                             for (var _b = __values(Object.keys(fullScreenMap)), _c = _b.next(); !_c.done; _c = _b.next()) {
@@ -914,13 +923,13 @@
                         /** @type {?} */
                         var exitFullScreenMap = {
                             // Chrome
-                            'exitFullscreen': function () { return document.exitFullscreen(); },
+                            exitFullscreen: function () { return document.exitFullscreen(); },
                             // Safari
-                            'webkitExitFullscreen': function () { return (( /** @type {?} */(document))).webkitExitFullscreen(); },
+                            webkitExitFullscreen: function () { return (( /** @type {?} */(document))).webkitExitFullscreen(); },
                             // Firefox
-                            'mozCancelFullScreen': function () { return (( /** @type {?} */(document))).mozCancelFullScreen(); },
+                            mozCancelFullScreen: function () { return (( /** @type {?} */(document))).mozCancelFullScreen(); },
                             // IE
-                            'msExitFullscreen': function () { return (( /** @type {?} */(document))).msExitFullscreen(); },
+                            msExitFullscreen: function () { return (( /** @type {?} */(document))).msExitFullscreen(); },
                         };
                         try {
                             for (var _b = __values(Object.keys(exitFullScreenMap)), _c = _b.next(); !_c.done; _c = _b.next()) {
@@ -1094,11 +1103,13 @@
             { type: core.Component, args: [{
                         selector: 'td-code-editor',
                         template: "<div class=\"editorContainer\" #editorContainer></div>\n",
-                        providers: [{
+                        providers: [
+                            {
                                 provide: forms.NG_VALUE_ACCESSOR,
                                 useExisting: core.forwardRef(function () { return TdCodeEditorComponent; }),
                                 multi: true,
-                            }],
+                            },
+                        ],
                         styles: [":host{display:block;position:relative}:host .editorContainer{position:absolute;top:0;bottom:0;left:0;right:0}::ng-deep .monaco-aria-container{display:none}"]
                     }] }
         ];
@@ -1149,15 +1160,9 @@
             };
         CovalentCodeEditorModule.decorators = [
             { type: core.NgModule, args: [{
-                        imports: [
-                            common.CommonModule,
-                        ],
-                        declarations: [
-                            TdCodeEditorComponent,
-                        ],
-                        exports: [
-                            TdCodeEditorComponent,
-                        ],
+                        imports: [common.CommonModule],
+                        declarations: [TdCodeEditorComponent],
+                        exports: [TdCodeEditorComponent],
                         entryComponents: [],
                         bootstrap: [TdCodeEditorComponent],
                     },] }

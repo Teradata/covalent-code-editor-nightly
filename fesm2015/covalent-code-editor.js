@@ -33,7 +33,7 @@ function waitUntilMonacoReady() {
  * @return {?}
  */
 function isMonacoLoaded() {
-    return typeof (((/** @type {?} */ (window))).monaco) === 'object';
+    return typeof ((/** @type {?} */ (window))).monaco === 'object';
 }
 /**
  * Loads monaco
@@ -45,7 +45,7 @@ function loadMonaco() {
         /** @type {?} */
         const onGotAmdLoader = () => {
             // Load monaco
-            ((/** @type {?} */ (window))).require.config({ paths: { 'vs': 'assets/monaco/vs' } });
+            ((/** @type {?} */ (window))).require.config({ paths: { vs: 'assets/monaco/vs' } });
             ((/** @type {?} */ (window))).require(['vs/editor/editor.main'], () => {
                 // TODO
             });
@@ -136,9 +136,12 @@ class TdCodeEditorComponent {
         // since accessing the window object need this check so serverside rendering doesn't fail
         if (typeof document === 'object' && !!document) {
             /* tslint:disable-next-line */
-            this._isElectronApp = (((/** @type {?} */ (window)))['process']) ? true : false;
+            this._isElectronApp = ((/** @type {?} */ (window)))['process'] ? true : false;
             if (this._isElectronApp) {
-                this._appPath = electron.remote.app.getAppPath().split('\\').join('/');
+                this._appPath = electron.remote.app
+                    .getAppPath()
+                    .split('\\')
+                    .join('/');
             }
         }
     }
@@ -193,7 +196,7 @@ class TdCodeEditorComponent {
                     this.propagateChange(this._value);
                     this.onChange.emit(undefined);
                     this._fromEditor = false;
-                    this.zone.run(() => this._value = value);
+                    this.zone.run(() => (this._value = value));
                 }
                 else {
                     // Editor is not loaded yet, try again in half a second
@@ -401,10 +404,10 @@ class TdCodeEditorComponent {
         this._theme = theme;
         if (this._componentInitialized) {
             if (this._webview) {
-                this._webview.send('setEditorOptions', { 'theme': theme });
+                this._webview.send('setEditorOptions', { theme: theme });
             }
             else if (this._editor) {
-                this._editor.updateOptions({ 'theme': theme });
+                this._editor.updateOptions({ theme: theme });
                 this.onEditorConfigurationChanged.emit(undefined);
             }
         }
@@ -740,15 +743,21 @@ class TdCodeEditorComponent {
     ngAfterViewInit() {
         if (!this._isElectronApp) {
             loadMonaco();
-            waitUntilMonacoReady().pipe(takeUntil(this._destroy)).subscribe(() => {
+            waitUntilMonacoReady()
+                .pipe(takeUntil(this._destroy))
+                .subscribe(() => {
                 this.initMonaco();
             });
         }
-        merge(fromEvent(window, 'resize').pipe(debounceTime(100)), this._widthSubject.asObservable().pipe(distinctUntilChanged()), this._heightSubject.asObservable().pipe(distinctUntilChanged())).pipe(takeUntil(this._destroy), debounceTime(100)).subscribe(() => {
+        merge(fromEvent(window, 'resize').pipe(debounceTime(100)), this._widthSubject.asObservable().pipe(distinctUntilChanged()), this._heightSubject.asObservable().pipe(distinctUntilChanged()))
+            .pipe(takeUntil(this._destroy), debounceTime(100))
+            .subscribe(() => {
             this.layout();
             this._changeDetectorRef.markForCheck();
         });
-        timer(500, 250).pipe(takeUntil(this._destroy)).subscribe(() => {
+        timer(500, 250)
+            .pipe(takeUntil(this._destroy))
+            .subscribe(() => {
             if (this._elementRef && this._elementRef.nativeElement) {
                 this._widthSubject.next(((/** @type {?} */ (this._elementRef.nativeElement))).getBoundingClientRect().width);
                 this._heightSubject.next(((/** @type {?} */ (this._elementRef.nativeElement))).getBoundingClientRect().height);
@@ -784,13 +793,13 @@ class TdCodeEditorComponent {
                 /** @type {?} */
                 const fullScreenMap = {
                     // Chrome
-                    'requestFullscreen': () => codeEditorElement.requestFullscreen(),
+                    requestFullscreen: () => codeEditorElement.requestFullscreen(),
                     // Safari
-                    'webkitRequestFullscreen': () => ((/** @type {?} */ (codeEditorElement))).webkitRequestFullscreen(),
+                    webkitRequestFullscreen: () => ((/** @type {?} */ (codeEditorElement))).webkitRequestFullscreen(),
                     // IE
-                    'msRequestFullscreen': () => ((/** @type {?} */ (codeEditorElement))).msRequestFullscreen(),
+                    msRequestFullscreen: () => ((/** @type {?} */ (codeEditorElement))).msRequestFullscreen(),
                     // Firefox
-                    'mozRequestFullScreen': () => ((/** @type {?} */ (codeEditorElement))).mozRequestFullScreen(),
+                    mozRequestFullScreen: () => ((/** @type {?} */ (codeEditorElement))).mozRequestFullScreen(),
                 };
                 for (const handler of Object.keys(fullScreenMap)) {
                     if (codeEditorElement[handler]) {
@@ -814,13 +823,13 @@ class TdCodeEditorComponent {
                 /** @type {?} */
                 const exitFullScreenMap = {
                     // Chrome
-                    'exitFullscreen': () => document.exitFullscreen(),
+                    exitFullscreen: () => document.exitFullscreen(),
                     // Safari
-                    'webkitExitFullscreen': () => ((/** @type {?} */ (document))).webkitExitFullscreen(),
+                    webkitExitFullscreen: () => ((/** @type {?} */ (document))).webkitExitFullscreen(),
                     // Firefox
-                    'mozCancelFullScreen': () => ((/** @type {?} */ (document))).mozCancelFullScreen(),
+                    mozCancelFullScreen: () => ((/** @type {?} */ (document))).mozCancelFullScreen(),
                     // IE
-                    'msExitFullscreen': () => ((/** @type {?} */ (document))).msExitFullscreen(),
+                    msExitFullscreen: () => ((/** @type {?} */ (document))).msExitFullscreen(),
                 };
                 for (const handler of Object.keys(exitFullScreenMap)) {
                     if (document[handler]) {
@@ -937,11 +946,13 @@ TdCodeEditorComponent.decorators = [
     { type: Component, args: [{
                 selector: 'td-code-editor',
                 template: "<div class=\"editorContainer\" #editorContainer></div>\n",
-                providers: [{
+                providers: [
+                    {
                         provide: NG_VALUE_ACCESSOR,
                         useExisting: forwardRef(() => TdCodeEditorComponent),
                         multi: true,
-                    }],
+                    },
+                ],
                 styles: [":host{display:block;position:relative}:host .editorContainer{position:absolute;top:0;bottom:0;left:0;right:0}::ng-deep .monaco-aria-container{display:none}"]
             }] }
 ];
@@ -984,15 +995,9 @@ class CovalentCodeEditorModule {
 }
 CovalentCodeEditorModule.decorators = [
     { type: NgModule, args: [{
-                imports: [
-                    CommonModule,
-                ],
-                declarations: [
-                    TdCodeEditorComponent,
-                ],
-                exports: [
-                    TdCodeEditorComponent,
-                ],
+                imports: [CommonModule],
+                declarations: [TdCodeEditorComponent],
+                exports: [TdCodeEditorComponent],
                 entryComponents: [],
                 bootstrap: [TdCodeEditorComponent],
             },] }
