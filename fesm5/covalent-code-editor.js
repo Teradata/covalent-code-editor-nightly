@@ -1,13 +1,13 @@
 import { __values, __awaiter, __generator } from 'tslib';
+import { Component, forwardRef, NgZone, ChangeDetectorRef, ElementRef, ViewChild, Input, Output, EventEmitter, NgModule } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { Subject, fromEvent, merge, timer } from 'rxjs';
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, forwardRef, NgZone, ChangeDetectorRef, NgModule } from '@angular/core';
+import { Subject, merge, fromEvent, timer } from 'rxjs';
+import { takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Waits until monaco has been loaded so we can reference its global object.
@@ -18,14 +18,17 @@ function waitUntilMonacoReady() {
     var monacoReady$ = new Subject();
     // create interval to check if monaco has been loaded
     /** @type {?} */
-    var interval = setInterval(function () {
+    var interval = setInterval((/**
+     * @return {?}
+     */
+    function () {
         if (isMonacoLoaded()) {
             // clear interval when monaco has been loaded
             clearInterval(interval);
             monacoReady$.next();
             monacoReady$.complete();
         }
-    }, 100);
+    }), 100);
     return monacoReady$.asObservable();
 }
 /**
@@ -43,13 +46,19 @@ function loadMonaco() {
     // check if the script tag has been created in case another code component has done this already
     if (!document.getElementById('monaco-loader-script')) {
         /** @type {?} */
-        var onGotAmdLoader = function () {
+        var onGotAmdLoader = (/**
+         * @return {?}
+         */
+        function () {
             // Load monaco
             ((/** @type {?} */ (window))).require.config({ paths: { vs: 'assets/monaco/vs' } });
-            ((/** @type {?} */ (window))).require(['vs/editor/editor.main'], function () {
+            ((/** @type {?} */ (window))).require(['vs/editor/editor.main'], (/**
+             * @return {?}
+             */
+            function () {
                 // TODO
-            });
-        };
+            }));
+        });
         // Load AMD loader if necessary
         if (!((/** @type {?} */ (window))).require) {
             /** @type {?} */
@@ -68,12 +77,15 @@ function loadMonaco() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
-var noop = function () {
+var noop = (/**
+ * @return {?}
+ */
+function () {
     // empty method
-};
+});
 // counter for ids to allow for multiple editors on one page
 /** @type {?} */
 var uniqueCounter = 0;
@@ -128,8 +140,15 @@ var TdCodeEditorComponent = /** @class */ (function () {
          */
         this.onChange = new EventEmitter();
         /* tslint:disable-next-line */
-        this.propagateChange = function (_) { };
-        this.onTouched = function () { return noop; };
+        this.propagateChange = (/**
+         * @param {?} _
+         * @return {?}
+         */
+        function (_) { });
+        this.onTouched = (/**
+         * @return {?}
+         */
+        function () { return noop; });
         // since accessing the window object need this check so serverside rendering doesn't fail
         if (typeof document === 'object' && !!document) {
             /* tslint:disable-next-line */
@@ -198,9 +217,12 @@ var TdCodeEditorComponent = /** @class */ (function () {
                     }
                     else {
                         // Editor is not loaded yet, try again in half a second
-                        this._setValueTimeout = setTimeout(function () {
+                        this._setValueTimeout = setTimeout((/**
+                         * @return {?}
+                         */
+                        function () {
                             _this.value = value;
-                        }, 500);
+                        }), 500);
                     }
                 }
                 else {
@@ -213,20 +235,29 @@ var TdCodeEditorComponent = /** @class */ (function () {
                         this.propagateChange(this._value);
                         this.onChange.emit(undefined);
                         this._fromEditor = false;
-                        this.zone.run(function () { return (_this._value = value); });
+                        this.zone.run((/**
+                         * @return {?}
+                         */
+                        function () { return (_this._value = value); }));
                     }
                     else {
                         // Editor is not loaded yet, try again in half a second
-                        this._setValueTimeout = setTimeout(function () {
+                        this._setValueTimeout = setTimeout((/**
+                         * @return {?}
+                         */
+                        function () {
                             _this.value = value;
-                        }, 500);
+                        }), 500);
                     }
                 }
             }
             else {
-                this._setValueTimeout = setTimeout(function () {
+                this._setValueTimeout = setTimeout((/**
+                 * @return {?}
+                 */
+                function () {
                     _this.value = value;
-                }, 500);
+                }), 500);
             }
         },
         enumerable: true,
@@ -297,12 +328,15 @@ var TdCodeEditorComponent = /** @class */ (function () {
             }
             else if (this._editor) {
                 this._value = this._editor.getValue();
-                setTimeout(function () {
+                setTimeout((/**
+                 * @return {?}
+                 */
+                function () {
                     _this._subject.next(_this._value);
                     _this._subject.complete();
                     _this._subject = new Subject();
                     _this.onEditorValueChange.emit(undefined);
-                });
+                }));
                 return this._subject.asObservable();
             }
         }
@@ -342,10 +376,14 @@ var TdCodeEditorComponent = /** @class */ (function () {
                         language: language,
                         theme: this._theme,
                     }, this.editorOptions));
-                    this._editor.getModel().onDidChangeContent(function (e) {
+                    this._editor.getModel().onDidChangeContent((/**
+                     * @param {?} e
+                     * @return {?}
+                     */
+                    function (e) {
                         _this._fromEditor = true;
                         _this.writeValue(_this._editor.getValue());
-                    });
+                    }));
                     this.onEditorConfigurationChanged.emit(undefined);
                     this.onEditorLanguageChanged.emit(undefined);
                 }
@@ -401,9 +439,12 @@ var TdCodeEditorComponent = /** @class */ (function () {
                 monaco.editor.defineTheme(language.customTheme.id, language.customTheme.theme);
                 this._theme = language.customTheme.id;
                 monaco.languages.registerCompletionItemProvider(language.id, {
-                    provideCompletionItems: function () {
+                    provideCompletionItems: (/**
+                     * @return {?}
+                     */
+                    function () {
                         return language.completionItemProvider;
-                    },
+                    }),
                 });
                 /** @type {?} */
                 var css = document.createElement('style');
@@ -452,10 +493,14 @@ var TdCodeEditorComponent = /** @class */ (function () {
                         language: this._language,
                         theme: this._theme,
                     }, this.editorOptions));
-                    this._editor.getModel().onDidChangeContent(function (e) {
+                    this._editor.getModel().onDidChangeContent((/**
+                     * @param {?} e
+                     * @return {?}
+                     */
+                    function (e) {
                         _this._fromEditor = true;
                         _this.writeValue(_this._editor.getValue());
-                    });
+                    }));
                 }
             }
         },
@@ -660,7 +705,11 @@ var TdCodeEditorComponent = /** @class */ (function () {
             //     this._webview.openDevTools();
             //  });
             // Process the data from the webview
-            this._webview.addEventListener('ipc-message', function (event) {
+            this._webview.addEventListener('ipc-message', (/**
+             * @param {?} event
+             * @return {?}
+             */
+            function (event) {
                 if (event.channel === 'editorContent') {
                     _this._fromEditor = true;
                     _this.writeValue(event.args[0]);
@@ -687,7 +736,7 @@ var TdCodeEditorComponent = /** @class */ (function () {
                 else if (event.channel === 'onEditorLanguageChanged') {
                     _this.onEditorLanguageChanged.emit(undefined);
                 }
-            });
+            }));
             // append the webview to the DOM
             this._editorContainer.nativeElement.appendChild(this._webview);
         }
@@ -712,24 +761,33 @@ var TdCodeEditorComponent = /** @class */ (function () {
             loadMonaco();
             waitUntilMonacoReady()
                 .pipe(takeUntil(this._destroy))
-                .subscribe(function () {
+                .subscribe((/**
+             * @return {?}
+             */
+            function () {
                 _this.initMonaco();
-            });
+            }));
         }
         merge(fromEvent(window, 'resize').pipe(debounceTime(100)), this._widthSubject.asObservable().pipe(distinctUntilChanged()), this._heightSubject.asObservable().pipe(distinctUntilChanged()))
             .pipe(takeUntil(this._destroy), debounceTime(100))
-            .subscribe(function () {
+            .subscribe((/**
+         * @return {?}
+         */
+        function () {
             _this.layout();
             _this._changeDetectorRef.markForCheck();
-        });
+        }));
         timer(500, 250)
             .pipe(takeUntil(this._destroy))
-            .subscribe(function () {
+            .subscribe((/**
+         * @return {?}
+         */
+        function () {
             if (_this._elementRef && _this._elementRef.nativeElement) {
                 _this._widthSubject.next(((/** @type {?} */ (_this._elementRef.nativeElement))).getBoundingClientRect().width);
                 _this._heightSubject.next(((/** @type {?} */ (_this._elementRef.nativeElement))).getBoundingClientRect().height);
             }
-        });
+        }));
     };
     /**
      * @return {?}
@@ -771,13 +829,25 @@ var TdCodeEditorComponent = /** @class */ (function () {
                 /** @type {?} */
                 var fullScreenMap = {
                     // Chrome
-                    requestFullscreen: function () { return codeEditorElement_1.requestFullscreen(); },
+                    requestFullscreen: (/**
+                     * @return {?}
+                     */
+                    function () { return codeEditorElement_1.requestFullscreen(); }),
                     // Safari
-                    webkitRequestFullscreen: function () { return ((/** @type {?} */ (codeEditorElement_1))).webkitRequestFullscreen(); },
+                    webkitRequestFullscreen: (/**
+                     * @return {?}
+                     */
+                    function () { return ((/** @type {?} */ (codeEditorElement_1))).webkitRequestFullscreen(); }),
                     // IE
-                    msRequestFullscreen: function () { return ((/** @type {?} */ (codeEditorElement_1))).msRequestFullscreen(); },
+                    msRequestFullscreen: (/**
+                     * @return {?}
+                     */
+                    function () { return ((/** @type {?} */ (codeEditorElement_1))).msRequestFullscreen(); }),
                     // Firefox
-                    mozRequestFullScreen: function () { return ((/** @type {?} */ (codeEditorElement_1))).mozRequestFullScreen(); },
+                    mozRequestFullScreen: (/**
+                     * @return {?}
+                     */
+                    function () { return ((/** @type {?} */ (codeEditorElement_1))).mozRequestFullScreen(); }),
                 };
                 try {
                     for (var _b = __values(Object.keys(fullScreenMap)), _c = _b.next(); !_c.done; _c = _b.next()) {
@@ -819,13 +889,25 @@ var TdCodeEditorComponent = /** @class */ (function () {
                 /** @type {?} */
                 var exitFullScreenMap = {
                     // Chrome
-                    exitFullscreen: function () { return document.exitFullscreen(); },
+                    exitFullscreen: (/**
+                     * @return {?}
+                     */
+                    function () { return document.exitFullscreen(); }),
                     // Safari
-                    webkitExitFullscreen: function () { return ((/** @type {?} */ (document))).webkitExitFullscreen(); },
+                    webkitExitFullscreen: (/**
+                     * @return {?}
+                     */
+                    function () { return ((/** @type {?} */ (document))).webkitExitFullscreen(); }),
                     // Firefox
-                    mozCancelFullScreen: function () { return ((/** @type {?} */ (document))).mozCancelFullScreen(); },
+                    mozCancelFullScreen: (/**
+                     * @return {?}
+                     */
+                    function () { return ((/** @type {?} */ (document))).mozCancelFullScreen(); }),
                     // IE
-                    msExitFullscreen: function () { return ((/** @type {?} */ (document))).msExitFullscreen(); },
+                    msExitFullscreen: (/**
+                     * @return {?}
+                     */
+                    function () { return ((/** @type {?} */ (document))).msExitFullscreen(); }),
                 };
                 try {
                     for (var _b = __values(Object.keys(exitFullScreenMap)), _c = _b.next(); !_c.done; _c = _b.next()) {
@@ -851,10 +933,12 @@ var TdCodeEditorComponent = /** @class */ (function () {
      */
     /**
      * addFullScreenModeCommand used to add the fullscreen option to the context menu
+     * @private
      * @return {?}
      */
     TdCodeEditorComponent.prototype.addFullScreenModeCommand = /**
      * addFullScreenModeCommand used to add the fullscreen option to the context menu
+     * @private
      * @return {?}
      */
     function () {
@@ -870,9 +954,13 @@ var TdCodeEditorComponent = /** @class */ (function () {
             contextMenuOrder: 1.5,
             // Method that will be executed when the action is triggered.
             // @param editor The editor instance is passed in as a convinience
-            run: function (ed) {
+            run: (/**
+             * @param {?} ed
+             * @return {?}
+             */
+            function (ed) {
                 _this.showFullScreenEditor();
-            },
+            }),
         });
     };
     /**
@@ -882,12 +970,14 @@ var TdCodeEditorComponent = /** @class */ (function () {
     /**
      * wrapEditorCalls used to proxy all the calls to the monaco editor
      * For calls for Electron use this to call the editor inside the webview
+     * @private
      * @param {?} obj
      * @return {?}
      */
     TdCodeEditorComponent.prototype.wrapEditorCalls = /**
      * wrapEditorCalls used to proxy all the calls to the monaco editor
      * For calls for Electron use this to call the editor inside the webview
+     * @private
      * @param {?} obj
      * @return {?}
      */
@@ -904,7 +994,11 @@ var TdCodeEditorComponent = /** @class */ (function () {
              */
             function (target, propKey, receiver) {
                 var _this = this;
-                return function () {
+                return (/**
+                 * @param {...?} args
+                 * @return {?}
+                 */
+                function () {
                     var args = [];
                     for (var _i = 0; _i < arguments.length; _i++) {
                         args[_i] = arguments[_i];
@@ -916,11 +1010,19 @@ var TdCodeEditorComponent = /** @class */ (function () {
                                 case 0:
                                     if (!that._componentInitialized) return [3 /*break*/, 4];
                                     if (!that._webview) return [3 /*break*/, 2];
-                                    executeJavaScript = function (code) {
-                                        return new Promise(function (resolve) {
+                                    executeJavaScript = (/**
+                                     * @param {?} code
+                                     * @return {?}
+                                     */
+                                    function (code) {
+                                        return new Promise((/**
+                                         * @param {?} resolve
+                                         * @return {?}
+                                         */
+                                        function (resolve) {
                                             that._webview.executeJavaScript(code, resolve);
-                                        });
-                                    };
+                                        }));
+                                    });
                                     return [4 /*yield*/, executeJavaScript('editor.' + propKey + '(' + args + ')')];
                                 case 1:
                                     result = _a.sent();
@@ -931,20 +1033,26 @@ var TdCodeEditorComponent = /** @class */ (function () {
                                 case 3:
                                     result = _a.sent();
                                     // since running javascript code manually need to force Angular to detect changes
-                                    setTimeout(function () {
-                                        that.zone.run(function () {
+                                    setTimeout((/**
+                                     * @return {?}
+                                     */
+                                    function () {
+                                        that.zone.run((/**
+                                         * @return {?}
+                                         */
+                                        function () {
                                             // tslint:disable-next-line
                                             if (!that._changeDetectorRef['destroyed']) {
                                                 that._changeDetectorRef.detectChanges();
                                             }
-                                        });
-                                    });
+                                        }));
+                                    }));
                                     return [2 /*return*/, result];
                                 case 4: return [2 /*return*/];
                             }
                         });
                     });
-                };
+                });
             },
         };
         return new Proxy(obj, handler);
@@ -956,11 +1064,13 @@ var TdCodeEditorComponent = /** @class */ (function () {
     /**
      * initMonaco method creates the monaco editor into the \@ViewChild('editorContainer')
      * and emit the onEditorInitialized event.  This is only used in the browser version.
+     * @private
      * @return {?}
      */
     TdCodeEditorComponent.prototype.initMonaco = /**
      * initMonaco method creates the monaco editor into the \@ViewChild('editorContainer')
      * and emit the onEditorInitialized event.  This is only used in the browser version.
+     * @private
      * @return {?}
      */
     function () {
@@ -973,19 +1083,26 @@ var TdCodeEditorComponent = /** @class */ (function () {
             language: this.language,
             theme: this._theme,
         }, this.editorOptions));
-        setTimeout(function () {
+        setTimeout((/**
+         * @return {?}
+         */
+        function () {
             _this._editorProxy = _this.wrapEditorCalls(_this._editor);
             _this._componentInitialized = true;
             _this.onEditorInitialized.emit(_this._editorProxy);
-        });
-        this._editor.getModel().onDidChangeContent(function (e) {
+        }));
+        this._editor.getModel().onDidChangeContent((/**
+         * @param {?} e
+         * @return {?}
+         */
+        function (e) {
             _this._fromEditor = true;
             _this.writeValue(_this._editor.getValue());
             if (_this.initialContentChange) {
                 _this.initialContentChange = false;
                 _this.layout();
             }
-        });
+        }));
         this.addFullScreenModeCommand();
     };
     TdCodeEditorComponent.decorators = [
@@ -995,7 +1112,10 @@ var TdCodeEditorComponent = /** @class */ (function () {
                     providers: [
                         {
                             provide: NG_VALUE_ACCESSOR,
-                            useExisting: forwardRef(function () { return TdCodeEditorComponent; }),
+                            useExisting: forwardRef((/**
+                             * @return {?}
+                             */
+                            function () { return TdCodeEditorComponent; })),
                             multi: true,
                         },
                     ],
@@ -1009,7 +1129,7 @@ var TdCodeEditorComponent = /** @class */ (function () {
         { type: ElementRef }
     ]; };
     TdCodeEditorComponent.propDecorators = {
-        _editorContainer: [{ type: ViewChild, args: ['editorContainer',] }],
+        _editorContainer: [{ type: ViewChild, args: ['editorContainer', { static: true },] }],
         automaticLayout: [{ type: Input, args: ['automaticLayout',] }],
         onEditorInitialized: [{ type: Output, args: ['editorInitialized',] }],
         onEditorConfigurationChanged: [{ type: Output, args: ['editorConfigurationChanged',] }],
@@ -1028,7 +1148,7 @@ var TdCodeEditorComponent = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var CovalentCodeEditorModule = /** @class */ (function () {
     function CovalentCodeEditorModule() {
@@ -1057,21 +1177,5 @@ var CovalentCodeEditorModule = /** @class */ (function () {
     return CovalentCodeEditorModule;
 }());
 
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
- */
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
- */
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
- */
-
-export { TdCodeEditorComponent, CovalentCodeEditorModule, waitUntilMonacoReady, isMonacoLoaded, loadMonaco };
-
+export { CovalentCodeEditorModule, TdCodeEditorComponent, isMonacoLoaded, loadMonaco, waitUntilMonacoReady };
 //# sourceMappingURL=covalent-code-editor.js.map
