@@ -31,7 +31,7 @@
     "Steven Ov <steven.ov@teradata.com>"
   ],
   "dependencies": {
-    "monaco-editor": "^0.10.1",
+    "monaco-editor": "^0.17.0",
     "tslib": "^1.9.0"
   },
   "peerDependencies": {
