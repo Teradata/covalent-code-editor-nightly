@@ -118,27 +118,27 @@ var TdCodeEditorComponent = /** @class */ (function () {
          * editorInitialized: function($event)
          * Event emitted when editor is first initialized
          */
-        this.onEditorInitialized = new EventEmitter();
+        this.editorInitialized = new EventEmitter();
         /**
          * editorConfigurationChanged: function($event)
          * Event emitted when editor's configuration changes
          */
-        this.onEditorConfigurationChanged = new EventEmitter();
+        this.editorConfigurationChanged = new EventEmitter();
         /**
          * editorLanguageChanged: function($event)
          * Event emitted when editor's Language changes
          */
-        this.onEditorLanguageChanged = new EventEmitter();
+        this.editorLanguageChanged = new EventEmitter();
         /**
          * editorValueChange: function($event)
          * Event emitted any time something changes the editor value
          */
-        this.onEditorValueChange = new EventEmitter();
+        this.editorValueChange = new EventEmitter();
         /**
          * The change event notifies you about a change happening in an input field.
          * Since the component is not a native Angular component have to specifiy the event emitter ourself
          */
-        this.onChange = new EventEmitter();
+        this.change = new EventEmitter();
         /* tslint:disable-next-line */
         this.propagateChange = (/**
          * @param {?} _
@@ -210,9 +210,9 @@ var TdCodeEditorComponent = /** @class */ (function () {
                         if (!this._fromEditor) {
                             this._webview.send('setEditorContent', value);
                         }
-                        this.onEditorValueChange.emit(undefined);
+                        this.editorValueChange.emit();
                         this.propagateChange(this._value);
-                        this.onChange.emit(undefined);
+                        this.change.emit();
                         this._fromEditor = false;
                     }
                     else {
@@ -231,9 +231,9 @@ var TdCodeEditorComponent = /** @class */ (function () {
                         if (!this._fromEditor) {
                             this._editor.setValue(value);
                         }
-                        this.onEditorValueChange.emit(undefined);
+                        this.editorValueChange.emit();
                         this.propagateChange(this._value);
-                        this.onChange.emit(undefined);
+                        this.change.emit();
                         this._fromEditor = false;
                         this.zone.run((/**
                          * @return {?}
@@ -335,7 +335,7 @@ var TdCodeEditorComponent = /** @class */ (function () {
                     _this._subject.next(_this._value);
                     _this._subject.complete();
                     _this._subject = new Subject();
-                    _this.onEditorValueChange.emit(undefined);
+                    _this.editorValueChange.emit();
                 }));
                 return this._subject.asObservable();
             }
@@ -384,8 +384,8 @@ var TdCodeEditorComponent = /** @class */ (function () {
                         _this._fromEditor = true;
                         _this.writeValue(_this._editor.getValue());
                     }));
-                    this.onEditorConfigurationChanged.emit(undefined);
-                    this.onEditorLanguageChanged.emit(undefined);
+                    this.editorConfigurationChanged.emit();
+                    this.editorLanguageChanged.emit();
                 }
             }
         },
@@ -409,25 +409,40 @@ var TdCodeEditorComponent = /** @class */ (function () {
      * @return {?}
      */
     function (language) {
+        var e_1, _a, e_2, _b;
         if (this._componentInitialized) {
             if (this._webview) {
                 this._webview.send('registerLanguage', language);
             }
             else if (this._editor) {
-                /** @type {?} */
-                var currentValue = this._editor.getValue();
                 this._editor.dispose();
-                for (var i = 0; i < language.completionItemProvider.length; i++) {
-                    /** @type {?} */
-                    var provider = language.completionItemProvider[i];
-                    /* tslint:disable-next-line */
-                    provider.kind = eval(provider.kind);
+                try {
+                    for (var _c = __values(language.completionItemProvider), _d = _c.next(); !_d.done; _d = _c.next()) {
+                        var provider = _d.value;
+                        /* tslint:disable-next-line */
+                        provider.kind = eval(provider.kind);
+                    }
                 }
-                for (var i = 0; i < language.monarchTokensProvider.length; i++) {
-                    /** @type {?} */
-                    var monarchTokens = language.monarchTokensProvider[i];
-                    /* tslint:disable-next-line */
-                    monarchTokens[0] = eval(monarchTokens[0]);
+                catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                finally {
+                    try {
+                        if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
+                    }
+                    finally { if (e_1) throw e_1.error; }
+                }
+                try {
+                    for (var _e = __values(language.monarchTokensProvider), _f = _e.next(); !_f.done; _f = _e.next()) {
+                        var monarchTokens = _f.value;
+                        /* tslint:disable-next-line */
+                        monarchTokens[0] = eval(monarchTokens[0]);
+                    }
+                }
+                catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                finally {
+                    try {
+                        if (_f && !_f.done && (_b = _e.return)) _b.call(_e);
+                    }
+                    finally { if (e_2) throw e_2.error; }
                 }
                 monaco.languages.register({ id: language.id });
                 monaco.languages.setMonarchTokensProvider(language.id, {
@@ -451,7 +466,7 @@ var TdCodeEditorComponent = /** @class */ (function () {
                 css.type = 'text/css';
                 css.innerHTML = language.monarchTokensProviderCSS;
                 document.body.appendChild(css);
-                this.onEditorConfigurationChanged.emit(undefined);
+                this.editorConfigurationChanged.emit();
             }
         }
     };
@@ -532,7 +547,7 @@ var TdCodeEditorComponent = /** @class */ (function () {
                 }
                 else if (this._editor) {
                     this._editor.updateOptions({ theme: theme });
-                    this.onEditorConfigurationChanged.emit(undefined);
+                    this.editorConfigurationChanged.emit();
                 }
             }
         },
@@ -572,12 +587,12 @@ var TdCodeEditorComponent = /** @class */ (function () {
             return this._editorOptions;
         },
         /**
-         * editorOptions?: Object
+         * editorOptions?: object
          * Options used on editor instantiation. Available options listed here:
          * https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditoroptions.html
          */
         set: /**
-         * editorOptions?: Object
+         * editorOptions?: object
          * Options used on editor instantiation. Available options listed here:
          * https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditoroptions.html
          * @param {?} editorOptions
@@ -591,7 +606,7 @@ var TdCodeEditorComponent = /** @class */ (function () {
                 }
                 else if (this._editor) {
                     this._editor.updateOptions(editorOptions);
-                    this.onEditorConfigurationChanged.emit(undefined);
+                    this.editorConfigurationChanged.emit();
                 }
             }
         },
@@ -689,7 +704,7 @@ var TdCodeEditorComponent = /** @class */ (function () {
         /** @type {?} */
         var editorHTML = '';
         if (this._isElectronApp) {
-            editorHTML = "<!DOCTYPE html>\n            <html style=\"height:100%\">\n            <head>\n                <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" />\n                <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" >\n                <link rel=\"stylesheet\" data-name=\"vs/editor/editor.main\"\n                    href=\"file://" + this._editorNodeModuleDirOverride + "/assets/monaco/vs/editor/editor.main.css\">\n            </head>\n            <body style=\"height:100%;width: 100%;margin: 0;padding: 0;overflow: hidden;\">\n            <div id=\"" + this._editorInnerContainer + "\" style=\"width:100%;height:100%;" + this._editorStyle + "\"></div>\n            <script>\n                // Get the ipcRenderer of electron for communication\n                const {ipcRenderer} = require('electron');\n            </script>\n            <script src=\"file://" + this._editorNodeModuleDirOverride + "/assets/monaco/vs/loader.js\"></script>\n            <script>\n                var editor;\n                var theme = '" + this._theme + "';\n                var value = '" + this._value + "';\n\n                require.config({\n                    baseUrl: '" + this._appPath + "/assets/monaco'\n                });\n                self.module = undefined;\n                self.process.browser = true;\n\n                require(['vs/editor/editor.main'], function() {\n                    editor = monaco.editor.create(document.getElementById('" + this._editorInnerContainer + "'), Object.assign({\n                        value: value,\n                        language: '" + this.language + "',\n                        theme: '" + this._theme + "',\n                    }, " + JSON.stringify(this.editorOptions) + "));\n                    editor.getModel().onDidChangeContent( (e)=> {\n                        ipcRenderer.sendToHost(\"onEditorContentChange\", editor.getValue());\n                    });\n                    editor.addAction({\n                      // An unique identifier of the contributed action.\n                      id: 'fullScreen',\n                      // A label of the action that will be presented to the user.\n                      label: 'Full Screen',\n                      // An optional array of keybindings for the action.\n                      contextMenuGroupId: 'navigation',\n                      keybindings: [" + this._keycode + "],\n                      contextMenuOrder: 1.5,\n                      // Method that will be executed when the action is triggered.\n                      // @param editor The editor instance is passed in as a convinience\n                      run: function(ed) {\n                        var editorDiv = document.getElementById('" + this._editorInnerContainer + "');\n                        editorDiv.webkitRequestFullscreen();\n                      }\n                    });\n                    editor.addAction({\n                      // An unique identifier of the contributed action.\n                      id: 'exitfullScreen',\n                      // A label of the action that will be presented to the user.\n                      label: 'Exit Full Screen',\n                      // An optional array of keybindings for the action.\n                      contextMenuGroupId: 'navigation',\n                      keybindings: [9],\n                      contextMenuOrder: 1.5,\n                      // Method that will be executed when the action is triggered.\n                      // @param editor The editor instance is passed in as a convinience\n                      run: function(ed) {\n                        var editorDiv = document.getElementById('" + this._editorInnerContainer + "');\n                        document.webkitExitFullscreen();\n                      }\n                    });\n                    ipcRenderer.sendToHost(\"onEditorInitialized\", this._editor);\n                });\n\n                // return back the value in the editor to the mainview\n                ipcRenderer.on('getEditorContent', function(){\n                    ipcRenderer.sendToHost(\"editorContent\", editor.getValue());\n                });\n\n                // set the value of the editor from what was sent from the mainview\n                ipcRenderer.on('setEditorContent', function(event, data){\n                    value = data;\n                    editor.setValue(data);\n                });\n\n                // set the style of the editor container div\n                ipcRenderer.on('setEditorStyle', function(event, data){\n                    var editorDiv = document.getElementById('" + this._editorInnerContainer + "');\n                    editorDiv.style = data.style;\n                    var currentValue = editor.getValue();\n                    editor.dispose();\n                    editor = monaco.editor.create(document.getElementById('" + this._editorInnerContainer + "'), Object.assign({\n                        value: currentValue,\n                        language: data.language,\n                        theme: data.theme,\n                    }, " + JSON.stringify(this.editorOptions) + "));\n                });\n\n                // set the options of the editor from what was sent from the mainview\n                ipcRenderer.on('setEditorOptions', function(event, data){\n                    editor.updateOptions(data);\n                    ipcRenderer.sendToHost(\"onEditorConfigurationChanged\", '');\n                });\n\n                // set the language of the editor from what was sent from the mainview\n                ipcRenderer.on('setLanguage', function(event, data){\n                    var currentValue = editor.getValue();\n                    editor.dispose();\n                    editor = monaco.editor.create(document.getElementById('" + this._editorInnerContainer + "'), Object.assign({\n                        value: currentValue,\n                        language: data,\n                        theme: theme,\n                    }, " + JSON.stringify(this.editorOptions) + "));\n                    ipcRenderer.sendToHost(\"onEditorConfigurationChanged\", '');\n                    ipcRenderer.sendToHost(\"onEditorLanguageChanged\", '');\n                });\n\n                // register a new language with editor\n                ipcRenderer.on('registerLanguage', function(event, data){\n                    var currentValue = editor.getValue();\n                    editor.dispose();\n\n                    for (var i = 0; i < data.completionItemProvider.length; i++) {\n                        var provider = data.completionItemProvider[i];\n                        provider.kind = eval(provider.kind);\n                    }\n                    for (var i = 0; i < data.monarchTokensProvider.length; i++) {\n                        var monarchTokens = data.monarchTokensProvider[i];\n                        monarchTokens[0] = eval(monarchTokens[0]);\n                    }\n                    monaco.languages.register({ id: data.id });\n\n                    monaco.languages.setMonarchTokensProvider(data.id, {\n                        tokenizer: {\n                            root: data.monarchTokensProvider\n                        }\n                    });\n\n                    // Define a new theme that constains only rules that match this language\n                    monaco.editor.defineTheme(data.customTheme.id, data.customTheme.theme);\n                    theme = data.customTheme.id;\n\n                    monaco.languages.registerCompletionItemProvider(data.id, {\n                        provideCompletionItems: () => {\n                            return data.completionItemProvider\n                        }\n                    });\n\n                    var css = document.createElement(\"style\");\n                    css.type = \"text/css\";\n                    css.innerHTML = data.monarchTokensProviderCSS;\n                    document.body.appendChild(css);\n\n                    ipcRenderer.sendToHost(\"onEditorConfigurationChanged\", '');\n                });\n\n                // Instruct the editor to remeasure its container\n                ipcRenderer.on('layout', function(){\n                    editor.layout();\n                });\n\n                // Instruct the editor go to full screen mode\n                ipcRenderer.on('showFullScreenEditor', function() {\n                  var editorDiv = document.getElementById('" + this._editorInnerContainer + "');\n                  editorDiv.webkitRequestFullscreen();\n                });\n\n                // Instruct the editor exit full screen mode\n                ipcRenderer.on('exitFullScreenEditor', function() {\n                  var editorDiv = document.getElementById('" + this._editorInnerContainer + "');\n                  editorDiv.webkitExitFullscreen();\n                });\n\n                ipcRenderer.on('dispose', function(){\n                  editor.dispose();\n                });\n\n                // need to manually resize the editor any time the window size\n                // changes. See: https://github.com/Microsoft/monaco-editor/issues/28\n                window.addEventListener(\"resize\", function resizeEditor() {\n                    editor.layout();\n                });\n            </script>\n            </body>\n            </html>";
+            editorHTML = "<!DOCTYPE html>\n            <html style=\"height:100%\">\n            <head>\n                <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" />\n                <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" >\n                <link rel=\"stylesheet\" data-name=\"vs/editor/editor.main\"\n                    href=\"file://" + this._editorNodeModuleDirOverride + "/assets/monaco/vs/editor/editor.main.css\">\n            </head>\n            <body style=\"height:100%;width: 100%;margin: 0;padding: 0;overflow: hidden;\">\n            <div id=\"" + this._editorInnerContainer + "\" style=\"width:100%;height:100%;" + this._editorStyle + "\"></div>\n            <script>\n                // Get the ipcRenderer of electron for communication\n                const {ipcRenderer} = require('electron');\n            </script>\n            <script src=\"file://" + this._editorNodeModuleDirOverride + "/assets/monaco/vs/loader.js\"></script>\n            <script>\n                var editor;\n                var theme = '" + this._theme + "';\n                var value = '" + this._value + "';\n\n                require.config({\n                    baseUrl: '" + this._appPath + "/assets/monaco'\n                });\n                self.module = undefined;\n                self.process.browser = true;\n\n                require(['vs/editor/editor.main'], function() {\n                    editor = monaco.editor.create(document.getElementById('" + this._editorInnerContainer + "'), Object.assign({\n                        value: value,\n                        language: '" + this.language + "',\n                        theme: '" + this._theme + "',\n                    }, " + JSON.stringify(this.editorOptions) + "));\n                    editor.getModel().onDidChangeContent( (e)=> {\n                        ipcRenderer.sendToHost(\"onEditorContentChange\", editor.getValue());\n                    });\n                    editor.addAction({\n                      // An unique identifier of the contributed action.\n                      id: 'fullScreen',\n                      // A label of the action that will be presented to the user.\n                      label: 'Full Screen',\n                      // An optional array of keybindings for the action.\n                      contextMenuGroupId: 'navigation',\n                      keybindings: [" + this._keycode + "],\n                      contextMenuOrder: 1.5,\n                      // Method that will be executed when the action is triggered.\n                      // @param editor The editor instance is passed in as a convinience\n                      run: function(ed) {\n                        var editorDiv = document.getElementById('" + this._editorInnerContainer + "');\n                        editorDiv.webkitRequestFullscreen();\n                      }\n                    });\n                    editor.addAction({\n                      // An unique identifier of the contributed action.\n                      id: 'exitfullScreen',\n                      // A label of the action that will be presented to the user.\n                      label: 'Exit Full Screen',\n                      // An optional array of keybindings for the action.\n                      contextMenuGroupId: 'navigation',\n                      keybindings: [9],\n                      contextMenuOrder: 1.5,\n                      // Method that will be executed when the action is triggered.\n                      // @param editor The editor instance is passed in as a convinience\n                      run: function(ed) {\n                        var editorDiv = document.getElementById('" + this._editorInnerContainer + "');\n                        document.webkitExitFullscreen();\n                      }\n                    });\n                    ipcRenderer.sendToHost(\"editorInitialized\", this._editor);\n                });\n\n                // return back the value in the editor to the mainview\n                ipcRenderer.on('getEditorContent', function(){\n                    ipcRenderer.sendToHost(\"editorContent\", editor.getValue());\n                });\n\n                // set the value of the editor from what was sent from the mainview\n                ipcRenderer.on('setEditorContent', function(event, data){\n                    value = data;\n                    editor.setValue(data);\n                });\n\n                // set the style of the editor container div\n                ipcRenderer.on('setEditorStyle', function(event, data){\n                    var editorDiv = document.getElementById('" + this._editorInnerContainer + "');\n                    editorDiv.style = data.style;\n                    var currentValue = editor.getValue();\n                    editor.dispose();\n                    editor = monaco.editor.create(document.getElementById('" + this._editorInnerContainer + "'), Object.assign({\n                        value: currentValue,\n                        language: data.language,\n                        theme: data.theme,\n                    }, " + JSON.stringify(this.editorOptions) + "));\n                });\n\n                // set the options of the editor from what was sent from the mainview\n                ipcRenderer.on('setEditorOptions', function(event, data){\n                    editor.updateOptions(data);\n                    ipcRenderer.sendToHost(\"editorConfigurationChanged\", '');\n                });\n\n                // set the language of the editor from what was sent from the mainview\n                ipcRenderer.on('setLanguage', function(event, data){\n                    var currentValue = editor.getValue();\n                    editor.dispose();\n                    editor = monaco.editor.create(document.getElementById('" + this._editorInnerContainer + "'), Object.assign({\n                        value: currentValue,\n                        language: data,\n                        theme: theme,\n                    }, " + JSON.stringify(this.editorOptions) + "));\n                    ipcRenderer.sendToHost(\"editorConfigurationChanged\", '');\n                    ipcRenderer.sendToHost(\"editorLanguageChanged\", '');\n                });\n\n                // register a new language with editor\n                ipcRenderer.on('registerLanguage', function(event, data){\n                    var currentValue = editor.getValue();\n                    editor.dispose();\n\n                    for (var i = 0; i < data.completionItemProvider.length; i++) {\n                        var provider = data.completionItemProvider[i];\n                        provider.kind = eval(provider.kind);\n                    }\n                    for (var i = 0; i < data.monarchTokensProvider.length; i++) {\n                        var monarchTokens = data.monarchTokensProvider[i];\n                        monarchTokens[0] = eval(monarchTokens[0]);\n                    }\n                    monaco.languages.register({ id: data.id });\n\n                    monaco.languages.setMonarchTokensProvider(data.id, {\n                        tokenizer: {\n                            root: data.monarchTokensProvider\n                        }\n                    });\n\n                    // Define a new theme that constains only rules that match this language\n                    monaco.editor.defineTheme(data.customTheme.id, data.customTheme.theme);\n                    theme = data.customTheme.id;\n\n                    monaco.languages.registerCompletionItemProvider(data.id, {\n                        provideCompletionItems: () => {\n                            return data.completionItemProvider\n                        }\n                    });\n\n                    var css = document.createElement(\"style\");\n                    css.type = \"text/css\";\n                    css.innerHTML = data.monarchTokensProviderCSS;\n                    document.body.appendChild(css);\n\n                    ipcRenderer.sendToHost(\"editorConfigurationChanged\", '');\n                });\n\n                // Instruct the editor to remeasure its container\n                ipcRenderer.on('layout', function(){\n                    editor.layout();\n                });\n\n                // Instruct the editor go to full screen mode\n                ipcRenderer.on('showFullScreenEditor', function() {\n                  var editorDiv = document.getElementById('" + this._editorInnerContainer + "');\n                  editorDiv.webkitRequestFullscreen();\n                });\n\n                // Instruct the editor exit full screen mode\n                ipcRenderer.on('exitFullScreenEditor', function() {\n                  var editorDiv = document.getElementById('" + this._editorInnerContainer + "');\n                  editorDiv.webkitExitFullscreen();\n                });\n\n                ipcRenderer.on('dispose', function(){\n                  editor.dispose();\n                });\n\n                // need to manually resize the editor any time the window size\n                // changes. See: https://github.com/Microsoft/monaco-editor/issues/28\n                window.addEventListener(\"resize\", function resizeEditor() {\n                    editor.layout();\n                });\n            </script>\n            </body>\n            </html>";
             // dynamically create the Electron Webview Element
             // this will sandbox the monaco code into its own DOM and its own
             // javascript instance. Need to do this to avoid problems with monaco
@@ -701,6 +716,7 @@ var TdCodeEditorComponent = /** @class */ (function () {
             // take the html content for the webview and base64 encode it and use as the src tag
             this._webview.setAttribute('src', 'data:text/html;base64,' + window.btoa(editorHTML));
             this._webview.setAttribute('style', 'display:inline-flex; width:100%; height:100%');
+            // to debug:
             //  this._webview.addEventListener('dom-ready', () => {
             //     this._webview.openDevTools();
             //  });
@@ -725,16 +741,16 @@ var TdCodeEditorComponent = /** @class */ (function () {
                         _this.layout();
                     }
                 }
-                else if (event.channel === 'onEditorInitialized') {
+                else if (event.channel === 'editorInitialized') {
                     _this._componentInitialized = true;
                     _this._editorProxy = _this.wrapEditorCalls(_this._editor);
-                    _this.onEditorInitialized.emit(_this._editorProxy);
+                    _this.editorInitialized.emit(_this._editorProxy);
                 }
-                else if (event.channel === 'onEditorConfigurationChanged') {
-                    _this.onEditorConfigurationChanged.emit(undefined);
+                else if (event.channel === 'editorConfigurationChanged') {
+                    _this.editorConfigurationChanged.emit();
                 }
-                else if (event.channel === 'onEditorLanguageChanged') {
-                    _this.onEditorLanguageChanged.emit(undefined);
+                else if (event.channel === 'editorLanguageChanged') {
+                    _this.editorLanguageChanged.emit();
                 }
             }));
             // append the webview to the DOM
@@ -818,7 +834,7 @@ var TdCodeEditorComponent = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        var e_1, _a;
+        var e_3, _a;
         if (this._componentInitialized) {
             if (this._webview) {
                 this._webview.send('showFullScreenEditor');
@@ -857,12 +873,12 @@ var TdCodeEditorComponent = /** @class */ (function () {
                         }
                     }
                 }
-                catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                catch (e_3_1) { e_3 = { error: e_3_1 }; }
                 finally {
                     try {
                         if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
                     }
-                    finally { if (e_1) throw e_1.error; }
+                    finally { if (e_3) throw e_3.error; }
                 }
             }
         }
@@ -880,7 +896,7 @@ var TdCodeEditorComponent = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        var e_2, _a;
+        var e_4, _a;
         if (this._componentInitialized) {
             if (this._webview) {
                 this._webview.send('exitFullScreenEditor');
@@ -917,12 +933,12 @@ var TdCodeEditorComponent = /** @class */ (function () {
                         }
                     }
                 }
-                catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                catch (e_4_1) { e_4 = { error: e_4_1 }; }
                 finally {
                     try {
                         if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
                     }
-                    finally { if (e_2) throw e_2.error; }
+                    finally { if (e_4) throw e_4.error; }
                 }
             }
         }
@@ -1004,12 +1020,12 @@ var TdCodeEditorComponent = /** @class */ (function () {
                         args[_i] = arguments[_i];
                     }
                     return __awaiter(_this, void 0, void 0, function () {
-                        var executeJavaScript, result, origMethod, result;
+                        var executeJavaScript, origMethod, result;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0:
-                                    if (!that._componentInitialized) return [3 /*break*/, 4];
-                                    if (!that._webview) return [3 /*break*/, 2];
+                                    if (!that._componentInitialized) return [3 /*break*/, 3];
+                                    if (!that._webview) return [3 /*break*/, 1];
                                     executeJavaScript = (/**
                                      * @param {?} code
                                      * @return {?}
@@ -1023,14 +1039,11 @@ var TdCodeEditorComponent = /** @class */ (function () {
                                             that._webview.executeJavaScript(code, resolve);
                                         }));
                                     });
-                                    return [4 /*yield*/, executeJavaScript('editor.' + propKey + '(' + args + ')')];
+                                    return [2 /*return*/, executeJavaScript('editor.' + propKey + '(' + args + ')')];
                                 case 1:
-                                    result = _a.sent();
-                                    return [2 /*return*/, result];
-                                case 2:
                                     origMethod = target[propKey];
                                     return [4 /*yield*/, origMethod.apply(that._editor, args)];
-                                case 3:
+                                case 2:
                                     result = _a.sent();
                                     // since running javascript code manually need to force Angular to detect changes
                                     setTimeout((/**
@@ -1048,7 +1061,7 @@ var TdCodeEditorComponent = /** @class */ (function () {
                                         }));
                                     }));
                                     return [2 /*return*/, result];
-                                case 4: return [2 /*return*/];
+                                case 3: return [2 /*return*/];
                             }
                         });
                     });
@@ -1059,17 +1072,17 @@ var TdCodeEditorComponent = /** @class */ (function () {
     };
     /**
      * initMonaco method creates the monaco editor into the @ViewChild('editorContainer')
-     * and emit the onEditorInitialized event.  This is only used in the browser version.
+     * and emit the editorInitialized event.  This is only used in the browser version.
      */
     /**
      * initMonaco method creates the monaco editor into the \@ViewChild('editorContainer')
-     * and emit the onEditorInitialized event.  This is only used in the browser version.
+     * and emit the editorInitialized event.  This is only used in the browser version.
      * @private
      * @return {?}
      */
     TdCodeEditorComponent.prototype.initMonaco = /**
      * initMonaco method creates the monaco editor into the \@ViewChild('editorContainer')
-     * and emit the onEditorInitialized event.  This is only used in the browser version.
+     * and emit the editorInitialized event.  This is only used in the browser version.
      * @private
      * @return {?}
      */
@@ -1089,7 +1102,7 @@ var TdCodeEditorComponent = /** @class */ (function () {
         function () {
             _this._editorProxy = _this.wrapEditorCalls(_this._editor);
             _this._componentInitialized = true;
-            _this.onEditorInitialized.emit(_this._editorProxy);
+            _this.editorInitialized.emit(_this._editorProxy);
         }));
         this._editor.getModel().onDidChangeContent((/**
          * @param {?} e
@@ -1131,11 +1144,11 @@ var TdCodeEditorComponent = /** @class */ (function () {
     TdCodeEditorComponent.propDecorators = {
         _editorContainer: [{ type: ViewChild, args: ['editorContainer', { static: true },] }],
         automaticLayout: [{ type: Input, args: ['automaticLayout',] }],
-        onEditorInitialized: [{ type: Output, args: ['editorInitialized',] }],
-        onEditorConfigurationChanged: [{ type: Output, args: ['editorConfigurationChanged',] }],
-        onEditorLanguageChanged: [{ type: Output, args: ['editorLanguageChanged',] }],
-        onEditorValueChange: [{ type: Output, args: ['editorValueChange',] }],
-        onChange: [{ type: Output, args: ['change',] }],
+        editorInitialized: [{ type: Output }],
+        editorConfigurationChanged: [{ type: Output }],
+        editorLanguageChanged: [{ type: Output }],
+        editorValueChange: [{ type: Output }],
+        change: [{ type: Output }],
         value: [{ type: Input, args: ['value',] }],
         language: [{ type: Input, args: ['language',] }],
         editorStyle: [{ type: Input, args: ['editorStyle',] }],

@@ -15,10 +15,10 @@ import { CommonModule } from '@angular/common';
  */
 function waitUntilMonacoReady() {
     /** @type {?} */
-    let monacoReady$ = new Subject();
+    const monacoReady$ = new Subject();
     // create interval to check if monaco has been loaded
     /** @type {?} */
-    let interval = setInterval((/**
+    const interval = setInterval((/**
      * @return {?}
      */
     () => {
@@ -121,27 +121,27 @@ class TdCodeEditorComponent {
          * editorInitialized: function($event)
          * Event emitted when editor is first initialized
          */
-        this.onEditorInitialized = new EventEmitter();
+        this.editorInitialized = new EventEmitter();
         /**
          * editorConfigurationChanged: function($event)
          * Event emitted when editor's configuration changes
          */
-        this.onEditorConfigurationChanged = new EventEmitter();
+        this.editorConfigurationChanged = new EventEmitter();
         /**
          * editorLanguageChanged: function($event)
          * Event emitted when editor's Language changes
          */
-        this.onEditorLanguageChanged = new EventEmitter();
+        this.editorLanguageChanged = new EventEmitter();
         /**
          * editorValueChange: function($event)
          * Event emitted any time something changes the editor value
          */
-        this.onEditorValueChange = new EventEmitter();
+        this.editorValueChange = new EventEmitter();
         /**
          * The change event notifies you about a change happening in an input field.
          * Since the component is not a native Angular component have to specifiy the event emitter ourself
          */
-        this.onChange = new EventEmitter();
+        this.change = new EventEmitter();
         /* tslint:disable-next-line */
         this.propagateChange = (/**
          * @param {?} _
@@ -193,9 +193,9 @@ class TdCodeEditorComponent {
                     if (!this._fromEditor) {
                         this._webview.send('setEditorContent', value);
                     }
-                    this.onEditorValueChange.emit(undefined);
+                    this.editorValueChange.emit();
                     this.propagateChange(this._value);
-                    this.onChange.emit(undefined);
+                    this.change.emit();
                     this._fromEditor = false;
                 }
                 else {
@@ -214,9 +214,9 @@ class TdCodeEditorComponent {
                     if (!this._fromEditor) {
                         this._editor.setValue(value);
                     }
-                    this.onEditorValueChange.emit(undefined);
+                    this.editorValueChange.emit();
                     this.propagateChange(this._value);
-                    this.onChange.emit(undefined);
+                    this.change.emit();
                     this._fromEditor = false;
                     this.zone.run((/**
                      * @return {?}
@@ -295,7 +295,7 @@ class TdCodeEditorComponent {
                     this._subject.next(this._value);
                     this._subject.complete();
                     this._subject = new Subject();
-                    this.onEditorValueChange.emit(undefined);
+                    this.editorValueChange.emit();
                 }));
                 return this._subject.asObservable();
             }
@@ -315,13 +315,13 @@ class TdCodeEditorComponent {
             }
             else if (this._editor) {
                 /** @type {?} */
-                let currentValue = this._editor.getValue();
+                const currentValue = this._editor.getValue();
                 this._editor.dispose();
                 /** @type {?} */
-                let myDiv = this._editorContainer.nativeElement;
+                const myDiv = this._editorContainer.nativeElement;
                 this._editor = monaco.editor.create(myDiv, Object.assign({
                     value: currentValue,
-                    language: language,
+                    language,
                     theme: this._theme,
                 }, this.editorOptions));
                 this._editor.getModel().onDidChangeContent((/**
@@ -332,8 +332,8 @@ class TdCodeEditorComponent {
                     this._fromEditor = true;
                     this.writeValue(this._editor.getValue());
                 }));
-                this.onEditorConfigurationChanged.emit(undefined);
-                this.onEditorLanguageChanged.emit(undefined);
+                this.editorConfigurationChanged.emit();
+                this.editorLanguageChanged.emit();
             }
         }
     }
@@ -355,18 +355,12 @@ class TdCodeEditorComponent {
                 this._webview.send('registerLanguage', language);
             }
             else if (this._editor) {
-                /** @type {?} */
-                let currentValue = this._editor.getValue();
                 this._editor.dispose();
-                for (let i = 0; i < language.completionItemProvider.length; i++) {
-                    /** @type {?} */
-                    let provider = language.completionItemProvider[i];
+                for (const provider of language.completionItemProvider) {
                     /* tslint:disable-next-line */
                     provider.kind = eval(provider.kind);
                 }
-                for (let i = 0; i < language.monarchTokensProvider.length; i++) {
-                    /** @type {?} */
-                    let monarchTokens = language.monarchTokensProvider[i];
+                for (const monarchTokens of language.monarchTokensProvider) {
                     /* tslint:disable-next-line */
                     monarchTokens[0] = eval(monarchTokens[0]);
                 }
@@ -388,11 +382,11 @@ class TdCodeEditorComponent {
                     }),
                 });
                 /** @type {?} */
-                let css = document.createElement('style');
+                const css = document.createElement('style');
                 css.type = 'text/css';
                 css.innerHTML = language.monarchTokensProviderCSS;
                 document.body.appendChild(css);
-                this.onEditorConfigurationChanged.emit(undefined);
+                this.editorConfigurationChanged.emit();
             }
         }
     }
@@ -410,13 +404,13 @@ class TdCodeEditorComponent {
             }
             else if (this._editor) {
                 /** @type {?} */
-                let containerDiv = this._editorContainer.nativeElement;
+                const containerDiv = this._editorContainer.nativeElement;
                 containerDiv.setAttribute('style', editorStyle);
                 /** @type {?} */
-                let currentValue = this._editor.getValue();
+                const currentValue = this._editor.getValue();
                 this._editor.dispose();
                 /** @type {?} */
-                let myDiv = this._editorContainer.nativeElement;
+                const myDiv = this._editorContainer.nativeElement;
                 this._editor = monaco.editor.create(myDiv, Object.assign({
                     value: currentValue,
                     language: this._language,
@@ -449,11 +443,11 @@ class TdCodeEditorComponent {
         this._theme = theme;
         if (this._componentInitialized) {
             if (this._webview) {
-                this._webview.send('setEditorOptions', { theme: theme });
+                this._webview.send('setEditorOptions', { theme });
             }
             else if (this._editor) {
-                this._editor.updateOptions({ theme: theme });
-                this.onEditorConfigurationChanged.emit(undefined);
+                this._editor.updateOptions({ theme });
+                this.editorConfigurationChanged.emit();
             }
         }
     }
@@ -480,7 +474,7 @@ class TdCodeEditorComponent {
         return this._keycode;
     }
     /**
-     * editorOptions?: Object
+     * editorOptions?: object
      * Options used on editor instantiation. Available options listed here:
      * https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditoroptions.html
      * @param {?} editorOptions
@@ -494,7 +488,7 @@ class TdCodeEditorComponent {
             }
             else if (this._editor) {
                 this._editor.updateOptions(editorOptions);
-                this.onEditorConfigurationChanged.emit(undefined);
+                this.editorConfigurationChanged.emit();
             }
         }
     }
@@ -619,7 +613,7 @@ class TdCodeEditorComponent {
                         document.webkitExitFullscreen();
                       }
                     });
-                    ipcRenderer.sendToHost("onEditorInitialized", this._editor);
+                    ipcRenderer.sendToHost("editorInitialized", this._editor);
                 });
 
                 // return back the value in the editor to the mainview
@@ -649,7 +643,7 @@ class TdCodeEditorComponent {
                 // set the options of the editor from what was sent from the mainview
                 ipcRenderer.on('setEditorOptions', function(event, data){
                     editor.updateOptions(data);
-                    ipcRenderer.sendToHost("onEditorConfigurationChanged", '');
+                    ipcRenderer.sendToHost("editorConfigurationChanged", '');
                 });
 
                 // set the language of the editor from what was sent from the mainview
@@ -661,8 +655,8 @@ class TdCodeEditorComponent {
                         language: data,
                         theme: theme,
                     }, ${JSON.stringify(this.editorOptions)}));
-                    ipcRenderer.sendToHost("onEditorConfigurationChanged", '');
-                    ipcRenderer.sendToHost("onEditorLanguageChanged", '');
+                    ipcRenderer.sendToHost("editorConfigurationChanged", '');
+                    ipcRenderer.sendToHost("editorLanguageChanged", '');
                 });
 
                 // register a new language with editor
@@ -701,7 +695,7 @@ class TdCodeEditorComponent {
                     css.innerHTML = data.monarchTokensProviderCSS;
                     document.body.appendChild(css);
 
-                    ipcRenderer.sendToHost("onEditorConfigurationChanged", '');
+                    ipcRenderer.sendToHost("editorConfigurationChanged", '');
                 });
 
                 // Instruct the editor to remeasure its container
@@ -744,6 +738,7 @@ class TdCodeEditorComponent {
             // take the html content for the webview and base64 encode it and use as the src tag
             this._webview.setAttribute('src', 'data:text/html;base64,' + window.btoa(editorHTML));
             this._webview.setAttribute('style', 'display:inline-flex; width:100%; height:100%');
+            // to debug:
             //  this._webview.addEventListener('dom-ready', () => {
             //     this._webview.openDevTools();
             //  });
@@ -768,16 +763,16 @@ class TdCodeEditorComponent {
                         this.layout();
                     }
                 }
-                else if (event.channel === 'onEditorInitialized') {
+                else if (event.channel === 'editorInitialized') {
                     this._componentInitialized = true;
                     this._editorProxy = this.wrapEditorCalls(this._editor);
-                    this.onEditorInitialized.emit(this._editorProxy);
+                    this.editorInitialized.emit(this._editorProxy);
                 }
-                else if (event.channel === 'onEditorConfigurationChanged') {
-                    this.onEditorConfigurationChanged.emit(undefined);
+                else if (event.channel === 'editorConfigurationChanged') {
+                    this.editorConfigurationChanged.emit();
                 }
-                else if (event.channel === 'onEditorLanguageChanged') {
-                    this.onEditorLanguageChanged.emit(undefined);
+                else if (event.channel === 'editorLanguageChanged') {
+                    this.editorLanguageChanged.emit();
                 }
             }));
             // append the webview to the DOM
@@ -957,9 +952,9 @@ class TdCodeEditorComponent {
      */
     wrapEditorCalls(obj) {
         /** @type {?} */
-        let that = this;
+        const that = this;
         /** @type {?} */
-        let handler = {
+        const handler = {
             /**
              * @param {?} target
              * @param {?} propKey
@@ -986,15 +981,13 @@ class TdCodeEditorComponent {
                             (resolve) => {
                                 that._webview.executeJavaScript(code, resolve);
                             })));
-                            /** @type {?} */
-                            let result = yield executeJavaScript('editor.' + propKey + '(' + args + ')');
-                            return result;
+                            return executeJavaScript('editor.' + propKey + '(' + args + ')');
                         }
                         else {
                             /** @type {?} */
                             const origMethod = target[propKey];
                             /** @type {?} */
-                            let result = yield origMethod.apply(that._editor, args);
+                            const result = yield origMethod.apply(that._editor, args);
                             // since running javascript code manually need to force Angular to detect changes
                             setTimeout((/**
                              * @return {?}
@@ -1020,13 +1013,13 @@ class TdCodeEditorComponent {
     }
     /**
      * initMonaco method creates the monaco editor into the \@ViewChild('editorContainer')
-     * and emit the onEditorInitialized event.  This is only used in the browser version.
+     * and emit the editorInitialized event.  This is only used in the browser version.
      * @private
      * @return {?}
      */
     initMonaco() {
         /** @type {?} */
-        let containerDiv = this._editorContainer.nativeElement;
+        const containerDiv = this._editorContainer.nativeElement;
         containerDiv.id = this._editorInnerContainer;
         this._editor = monaco.editor.create(containerDiv, Object.assign({
             value: this._value,
@@ -1039,7 +1032,7 @@ class TdCodeEditorComponent {
         () => {
             this._editorProxy = this.wrapEditorCalls(this._editor);
             this._componentInitialized = true;
-            this.onEditorInitialized.emit(this._editorProxy);
+            this.editorInitialized.emit(this._editorProxy);
         }));
         this._editor.getModel().onDidChangeContent((/**
          * @param {?} e
@@ -1082,11 +1075,11 @@ TdCodeEditorComponent.ctorParameters = () => [
 TdCodeEditorComponent.propDecorators = {
     _editorContainer: [{ type: ViewChild, args: ['editorContainer', { static: true },] }],
     automaticLayout: [{ type: Input, args: ['automaticLayout',] }],
-    onEditorInitialized: [{ type: Output, args: ['editorInitialized',] }],
-    onEditorConfigurationChanged: [{ type: Output, args: ['editorConfigurationChanged',] }],
-    onEditorLanguageChanged: [{ type: Output, args: ['editorLanguageChanged',] }],
-    onEditorValueChange: [{ type: Output, args: ['editorValueChange',] }],
-    onChange: [{ type: Output, args: ['change',] }],
+    editorInitialized: [{ type: Output }],
+    editorConfigurationChanged: [{ type: Output }],
+    editorLanguageChanged: [{ type: Output }],
+    editorValueChange: [{ type: Output }],
+    change: [{ type: Output }],
     value: [{ type: Input, args: ['value',] }],
     language: [{ type: Input, args: ['language',] }],
     editorStyle: [{ type: Input, args: ['editorStyle',] }],

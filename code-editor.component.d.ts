@@ -37,27 +37,27 @@ export declare class TdCodeEditorComponent implements OnInit, AfterViewInit, Con
      * editorInitialized: function($event)
      * Event emitted when editor is first initialized
      */
-    onEditorInitialized: EventEmitter<void>;
+    editorInitialized: EventEmitter<void>;
     /**
      * editorConfigurationChanged: function($event)
      * Event emitted when editor's configuration changes
      */
-    onEditorConfigurationChanged: EventEmitter<void>;
+    editorConfigurationChanged: EventEmitter<void>;
     /**
      * editorLanguageChanged: function($event)
      * Event emitted when editor's Language changes
      */
-    onEditorLanguageChanged: EventEmitter<void>;
+    editorLanguageChanged: EventEmitter<void>;
     /**
      * editorValueChange: function($event)
      * Event emitted any time something changes the editor value
      */
-    onEditorValueChange: EventEmitter<void>;
+    editorValueChange: EventEmitter<void>;
     /**
      * The change event notifies you about a change happening in an input field.
      * Since the component is not a native Angular component have to specifiy the event emitter ourself
      */
-    onChange: EventEmitter<void>;
+    change: EventEmitter<void>;
     propagateChange: (_: any) => void;
     onTouched: () => any;
     /**
@@ -107,7 +107,7 @@ export declare class TdCodeEditorComponent implements OnInit, AfterViewInit, Con
      */
     fullScreenKeyBinding: number[];
     /**
-     * editorOptions?: Object
+     * editorOptions?: object
      * Options used on editor instantiation. Available options listed here:
      * https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditoroptions.html
      */
@@ -160,7 +160,7 @@ export declare class TdCodeEditorComponent implements OnInit, AfterViewInit, Con
     private wrapEditorCalls;
     /**
      * initMonaco method creates the monaco editor into the @ViewChild('editorContainer')
-     * and emit the onEditorInitialized event.  This is only used in the browser version.
+     * and emit the editorInitialized event.  This is only used in the browser version.
      */
     private initMonaco;
 }
