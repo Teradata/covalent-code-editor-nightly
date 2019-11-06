@@ -27,6 +27,7 @@ export declare class TdCodeEditorComponent implements OnInit, AfterViewInit, Con
     private _keycode;
     private _setValueTimeout;
     private initialContentChange;
+    private _registeredLanguagesStyles;
     _editorContainer: ElementRef;
     /**
      * automaticLayout?: boolean

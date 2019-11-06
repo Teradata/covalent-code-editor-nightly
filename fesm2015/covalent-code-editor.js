@@ -117,6 +117,7 @@ class TdCodeEditorComponent {
         this._editorOptions = {};
         this._isFullScreen = false;
         this.initialContentChange = true;
+        this._registeredLanguagesStyles = [];
         /**
          * editorInitialized: function($event)
          * Event emitted when editor is first initialized
@@ -387,6 +388,7 @@ class TdCodeEditorComponent {
                 css.innerHTML = language.monarchTokensProviderCSS;
                 document.body.appendChild(css);
                 this.editorConfigurationChanged.emit();
+                this._registeredLanguagesStyles = [...this._registeredLanguagesStyles, css];
             }
         }
     }
@@ -565,6 +567,7 @@ class TdCodeEditorComponent {
                 var editor;
                 var theme = '${this._theme}';
                 var value = '${this._value}';
+                var registeredLanguagesStyles = [];
 
                 require.config({
                     baseUrl: '${this._appPath}/assets/monaco'
@@ -694,6 +697,8 @@ class TdCodeEditorComponent {
                     css.type = "text/css";
                     css.innerHTML = data.monarchTokensProviderCSS;
                     document.body.appendChild(css);
+                    registeredLanguagesStyles = [...registeredLanguagesStyles, css];
+
 
                     ipcRenderer.sendToHost("editorConfigurationChanged", '');
                 });
@@ -717,6 +722,7 @@ class TdCodeEditorComponent {
 
                 ipcRenderer.on('dispose', function(){
                   editor.dispose();
+                  registeredLanguagesStyles.forEach((style) => style.remove());
                 });
 
                 // need to manually resize the editor any time the window size
@@ -822,6 +828,11 @@ class TdCodeEditorComponent {
      */
     ngOnDestroy() {
         this._changeDetectorRef.detach();
+        this._registeredLanguagesStyles.forEach((/**
+         * @param {?} style
+         * @return {?}
+         */
+        (style) => style.remove()));
         if (this._webview) {
             this._webview.send('dispose');
         }
