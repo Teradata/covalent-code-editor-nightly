@@ -31,12 +31,11 @@
     "Steven Ov <steven.ov@teradata.com>"
   ],
   "dependencies": {
-    "monaco-editor": "^0.17.0",
-    "tslib": "^1.9.0"
+    "monaco-editor": "^0.17.0"
   },
   "peerDependencies": {
-    "@angular/common": "^7.0.0 || ^8.0.0",
-    "@angular/core": "^7.0.0 || ^8.0.0"
+    "@angular/common": "^7.0.0 || ^8.0.0 || ^9.0.0",
+    "@angular/core": "^7.0.0 || ^8.0.0 || ^9.0.0"
   },
   "main": "bundles/covalent-code-editor.umd.js",
   "module": "fesm5/covalent-code-editor.js",

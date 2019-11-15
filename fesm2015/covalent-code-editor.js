@@ -86,6 +86,7 @@ const noop = (/**
 () => {
     // empty method
 });
+const ɵ0 = noop;
 // counter for ids to allow for multiple editors on one page
 /** @type {?} */
 let uniqueCounter = 0;
@@ -1098,6 +1099,174 @@ TdCodeEditorComponent.propDecorators = {
     fullScreenKeyBinding: [{ type: Input, args: ['fullScreenKeyBinding',] }],
     editorOptions: [{ type: Input, args: ['editorOptions',] }]
 };
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._destroy;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._widthSubject;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._heightSubject;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._editorStyle;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._appPath;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._isElectronApp;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._webview;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._value;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._theme;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._language;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._subject;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._editorInnerContainer;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._editorNodeModuleDirOverride;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._editor;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._editorProxy;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._componentInitialized;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._fromEditor;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._editorOptions;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._isFullScreen;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._keycode;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._setValueTimeout;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype.initialContentChange;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._registeredLanguagesStyles;
+    /** @type {?} */
+    TdCodeEditorComponent.prototype._editorContainer;
+    /**
+     * editorInitialized: function($event)
+     * Event emitted when editor is first initialized
+     * @type {?}
+     */
+    TdCodeEditorComponent.prototype.editorInitialized;
+    /**
+     * editorConfigurationChanged: function($event)
+     * Event emitted when editor's configuration changes
+     * @type {?}
+     */
+    TdCodeEditorComponent.prototype.editorConfigurationChanged;
+    /**
+     * editorLanguageChanged: function($event)
+     * Event emitted when editor's Language changes
+     * @type {?}
+     */
+    TdCodeEditorComponent.prototype.editorLanguageChanged;
+    /**
+     * editorValueChange: function($event)
+     * Event emitted any time something changes the editor value
+     * @type {?}
+     */
+    TdCodeEditorComponent.prototype.editorValueChange;
+    /**
+     * The change event notifies you about a change happening in an input field.
+     * Since the component is not a native Angular component have to specifiy the event emitter ourself
+     * @type {?}
+     */
+    TdCodeEditorComponent.prototype.change;
+    /** @type {?} */
+    TdCodeEditorComponent.prototype.propagateChange;
+    /** @type {?} */
+    TdCodeEditorComponent.prototype.onTouched;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype.zone;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._changeDetectorRef;
+    /**
+     * @type {?}
+     * @private
+     */
+    TdCodeEditorComponent.prototype._elementRef;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1123,6 +1292,21 @@ CovalentCodeEditorModule.decorators = [
                 bootstrap: [TdCodeEditorComponent],
             },] }
 ];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 export { CovalentCodeEditorModule, TdCodeEditorComponent, isMonacoLoaded, loadMonaco, waitUntilMonacoReady };
 //# sourceMappingURL=covalent-code-editor.js.map
