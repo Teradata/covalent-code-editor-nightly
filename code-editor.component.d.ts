@@ -30,11 +30,6 @@ export declare class TdCodeEditorComponent implements OnInit, AfterViewInit, Con
     private _registeredLanguagesStyles;
     _editorContainer: ElementRef;
     /**
-     * automaticLayout?: boolean
-     * @deprecated in favor of our own resize implementation.
-     */
-    automaticLayout: boolean;
-    /**
      * editorInitialized: function($event)
      * Event emitted when editor is first initialized
      */

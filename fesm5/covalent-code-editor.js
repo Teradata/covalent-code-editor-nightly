@@ -1,5 +1,5 @@
 import { __values, __spread, __awaiter, __generator } from 'tslib';
-import { EventEmitter, Component, forwardRef, NgZone, ChangeDetectorRef, ElementRef, ViewChild, Input, Output, NgModule } from '@angular/core';
+import { EventEmitter, Component, forwardRef, NgZone, ChangeDetectorRef, ElementRef, ViewChild, Output, Input, NgModule } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject, merge, fromEvent, timer } from 'rxjs';
 import { takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -163,24 +163,6 @@ var TdCodeEditorComponent = /** @class */ (function () {
             }
         }
     }
-    Object.defineProperty(TdCodeEditorComponent.prototype, "automaticLayout", {
-        /**
-         * automaticLayout?: boolean
-         * @deprecated in favor of our own resize implementation.
-         */
-        set: /**
-         * automaticLayout?: boolean
-         * @deprecated in favor of our own resize implementation.
-         * @param {?} automaticLayout
-         * @return {?}
-         */
-        function (automaticLayout) {
-            // tslint:disable-next-line
-            console.warn('[automaticLayout] has been deprecated in favor of our own resize implementation and will be removed on 3.0.0');
-        },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(TdCodeEditorComponent.prototype, "value", {
         get: /**
          * @return {?}
@@ -1151,7 +1133,6 @@ var TdCodeEditorComponent = /** @class */ (function () {
     ]; };
     TdCodeEditorComponent.propDecorators = {
         _editorContainer: [{ type: ViewChild, args: ['editorContainer', { static: true },] }],
-        automaticLayout: [{ type: Input, args: ['automaticLayout',] }],
         editorInitialized: [{ type: Output }],
         editorConfigurationChanged: [{ type: Output }],
         editorLanguageChanged: [{ type: Output }],

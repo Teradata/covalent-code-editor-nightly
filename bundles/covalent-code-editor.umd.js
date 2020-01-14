@@ -359,24 +359,6 @@
                 }
             }
         }
-        Object.defineProperty(TdCodeEditorComponent.prototype, "automaticLayout", {
-            /**
-             * automaticLayout?: boolean
-             * @deprecated in favor of our own resize implementation.
-             */
-            set: /**
-             * automaticLayout?: boolean
-             * @deprecated in favor of our own resize implementation.
-             * @param {?} automaticLayout
-             * @return {?}
-             */
-            function (automaticLayout) {
-                // tslint:disable-next-line
-                console.warn('[automaticLayout] has been deprecated in favor of our own resize implementation and will be removed on 3.0.0');
-            },
-            enumerable: true,
-            configurable: true
-        });
         Object.defineProperty(TdCodeEditorComponent.prototype, "value", {
             get: /**
              * @return {?}
@@ -1347,7 +1329,6 @@
         ]; };
         TdCodeEditorComponent.propDecorators = {
             _editorContainer: [{ type: core.ViewChild, args: ['editorContainer', { static: true },] }],
-            automaticLayout: [{ type: core.Input, args: ['automaticLayout',] }],
             editorInitialized: [{ type: core.Output }],
             editorConfigurationChanged: [{ type: core.Output }],
             editorLanguageChanged: [{ type: core.Output }],
