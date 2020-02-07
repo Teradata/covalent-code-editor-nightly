@@ -1519,24 +1519,11 @@
     var CovalentCodeEditorModule = /** @class */ (function () {
         function CovalentCodeEditorModule() {
         }
-        /**
-         * @return {?}
-         */
-        CovalentCodeEditorModule.forRoot = /**
-         * @return {?}
-         */
-        function () {
-            return {
-                ngModule: CovalentCodeEditorModule,
-                providers: [],
-            };
-        };
         CovalentCodeEditorModule.decorators = [
             { type: core.NgModule, args: [{
                         imports: [common.CommonModule],
                         declarations: [TdCodeEditorComponent],
                         exports: [TdCodeEditorComponent],
-                        entryComponents: [],
                         bootstrap: [TdCodeEditorComponent],
                     },] }
         ];

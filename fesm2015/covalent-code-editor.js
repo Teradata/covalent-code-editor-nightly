@@ -1262,22 +1262,12 @@ if (false) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class CovalentCodeEditorModule {
-    /**
-     * @return {?}
-     */
-    static forRoot() {
-        return {
-            ngModule: CovalentCodeEditorModule,
-            providers: [],
-        };
-    }
 }
 CovalentCodeEditorModule.decorators = [
     { type: NgModule, args: [{
                 imports: [CommonModule],
                 declarations: [TdCodeEditorComponent],
                 exports: [TdCodeEditorComponent],
-                entryComponents: [],
                 bootstrap: [TdCodeEditorComponent],
             },] }
 ];

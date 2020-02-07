@@ -64,7 +64,8 @@ export declare class TdCodeEditorComponent implements OnInit, AfterViewInit, Con
      * value?: string
      * Value in the Editor after async getEditorContent was called
      */
-    value: string;
+    set value(value: string);
+    get value(): string;
     /**
      * Implemented as part of ControlValueAccessor.
      */
@@ -80,7 +81,8 @@ export declare class TdCodeEditorComponent implements OnInit, AfterViewInit, Con
      * language?: string
      * language used in editor
      */
-    language: string;
+    set language(language: string);
+    get language(): string;
     /**
      * registerLanguage?: function
      * Registers a custom Language within the editor
@@ -90,24 +92,28 @@ export declare class TdCodeEditorComponent implements OnInit, AfterViewInit, Con
      * style?: string
      * css style of the editor on the page
      */
-    editorStyle: string;
+    set editorStyle(editorStyle: string);
+    get editorStyle(): string;
     /**
      * theme?: string
      * Theme to be applied to editor
      */
-    theme: string;
+    set theme(theme: string);
+    get theme(): string;
     /**
      * fullScreenKeyBinding?: number
      * See here for key bindings https://microsoft.github.io/monaco-editor/api/enums/monaco.keycode.html
      * Sets the KeyCode for shortcutting to Fullscreen mode
      */
-    fullScreenKeyBinding: number[];
+    set fullScreenKeyBinding(keycode: number[]);
+    get fullScreenKeyBinding(): number[];
     /**
      * editorOptions?: object
      * Options used on editor instantiation. Available options listed here:
      * https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditoroptions.html
      */
-    editorOptions: any;
+    set editorOptions(editorOptions: any);
+    get editorOptions(): any;
     /**
      * layout method that calls layout method of editor and instructs the editor to remeasure its container
      */
@@ -115,11 +121,11 @@ export declare class TdCodeEditorComponent implements OnInit, AfterViewInit, Con
     /**
      * Returns if in Electron mode or not
      */
-    readonly isElectronApp: boolean;
+    get isElectronApp(): boolean;
     /**
      * Returns if in Full Screen Mode or not
      */
-    readonly isFullScreen: boolean;
+    get isFullScreen(): boolean;
     /**
      * setEditorNodeModuleDirOverride function that overrides where to look
      * for the editor node_module. Used in tests for Electron or anywhere that the
