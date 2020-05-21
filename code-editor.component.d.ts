@@ -1,7 +1,7 @@
-import { EventEmitter, OnInit, AfterViewInit, ElementRef, NgZone, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { EventEmitter, OnInit, ElementRef, NgZone, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 import { Observable } from 'rxjs';
-export declare class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValueAccessor, OnDestroy {
+export declare class TdCodeEditorComponent implements OnInit, ControlValueAccessor, OnDestroy {
     private zone;
     private _changeDetectorRef;
     private _elementRef;
@@ -9,24 +9,17 @@ export declare class TdCodeEditorComponent implements OnInit, AfterViewInit, Con
     private _widthSubject;
     private _heightSubject;
     private _editorStyle;
-    private _appPath;
-    private _isElectronApp;
-    private _webview;
     private _value;
     private _theme;
     private _language;
     private _subject;
     private _editorInnerContainer;
-    private _editorNodeModuleDirOverride;
     private _editor;
-    private _editorProxy;
-    private _componentInitialized;
     private _fromEditor;
+    private _componentInitialized;
     private _editorOptions;
     private _isFullScreen;
     private _keycode;
-    private _setValueTimeout;
-    private initialContentChange;
     private _registeredLanguagesStyles;
     _editorContainer: ElementRef;
     /**
@@ -57,15 +50,11 @@ export declare class TdCodeEditorComponent implements OnInit, AfterViewInit, Con
     propagateChange: (_: any) => void;
     onTouched: () => any;
     /**
-     * Set if using Electron mode when object is created
-     */
-    constructor(zone: NgZone, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef);
-    /**
      * value?: string
-     * Value in the Editor after async getEditorContent was called
      */
     set value(value: string);
     get value(): string;
+    applyValue(): void;
     /**
      * Implemented as part of ControlValueAccessor.
      */
@@ -83,6 +72,7 @@ export declare class TdCodeEditorComponent implements OnInit, AfterViewInit, Con
      */
     set language(language: string);
     get language(): string;
+    applyLanguage(): void;
     /**
      * registerLanguage?: function
      * Registers a custom Language within the editor
@@ -94,6 +84,7 @@ export declare class TdCodeEditorComponent implements OnInit, AfterViewInit, Con
      */
     set editorStyle(editorStyle: string);
     get editorStyle(): string;
+    applyStyle(): void;
     /**
      * theme?: string
      * Theme to be applied to editor
@@ -119,29 +110,11 @@ export declare class TdCodeEditorComponent implements OnInit, AfterViewInit, Con
      */
     layout(): void;
     /**
-     * Returns if in Electron mode or not
-     */
-    get isElectronApp(): boolean;
-    /**
      * Returns if in Full Screen Mode or not
      */
     get isFullScreen(): boolean;
-    /**
-     * setEditorNodeModuleDirOverride function that overrides where to look
-     * for the editor node_module. Used in tests for Electron or anywhere that the
-     * node_modules are not in the expected location.
-     */
-    setEditorNodeModuleDirOverride(dirOverride: string): void;
-    /**
-     * ngOnInit only used for Electron version of editor
-     * This is where the webview is created to sandbox away the editor
-     */
+    constructor(zone: NgZone, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef);
     ngOnInit(): void;
-    /**
-     * ngAfterViewInit only used for browser version of editor
-     * This is where the AMD Loader scripts are added to the browser and the editor scripts are "required"
-     */
-    ngAfterViewInit(): void;
     ngOnDestroy(): void;
     /**
      * showFullScreenEditor request for full screen of Code Editor based on its browser type.
@@ -155,14 +128,4 @@ export declare class TdCodeEditorComponent implements OnInit, AfterViewInit, Con
      * addFullScreenModeCommand used to add the fullscreen option to the context menu
      */
     private addFullScreenModeCommand;
-    /**
-     * wrapEditorCalls used to proxy all the calls to the monaco editor
-     * For calls for Electron use this to call the editor inside the webview
-     */
-    private wrapEditorCalls;
-    /**
-     * initMonaco method creates the monaco editor into the @ViewChild('editorContainer')
-     * and emit the editorInitialized event.  This is only used in the browser version.
-     */
-    private initMonaco;
 }
