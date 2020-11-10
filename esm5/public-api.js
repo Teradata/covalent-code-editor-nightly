@@ -1,7 +1,0 @@
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-export { TdCodeEditorComponent } from './code-editor.component';
-export { CovalentCodeEditorModule } from './code-editor.module';
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHVibGljLWFwaS5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0Bjb3ZhbGVudC9jb2RlLWVkaXRvci8iLCJzb3VyY2VzIjpbInB1YmxpYy1hcGkudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OztBQUFBLE9BQU8sRUFBRSxxQkFBcUIsRUFBRSxNQUFNLHlCQUF5QixDQUFDO0FBQ2hFLE9BQU8sRUFBRSx3QkFBd0IsRUFBRSxNQUFNLHNCQUFzQixDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IHsgVGRDb2RlRWRpdG9yQ29tcG9uZW50IH0gZnJvbSAnLi9jb2RlLWVkaXRvci5jb21wb25lbnQnO1xuZXhwb3J0IHsgQ292YWxlbnRDb2RlRWRpdG9yTW9kdWxlIH0gZnJvbSAnLi9jb2RlLWVkaXRvci5tb2R1bGUnO1xuIl19
