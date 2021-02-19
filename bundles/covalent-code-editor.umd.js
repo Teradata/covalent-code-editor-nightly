@@ -1,6 +1,6 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/forms'), require('rxjs'), require('rxjs/operators'), require('monaco-editor'), require('@angular/common')) :
-    typeof define === 'function' && define.amd ? define('@covalent/code-editor', ['exports', '@angular/core', '@angular/forms', 'rxjs', 'rxjs/operators', 'monaco-editor', '@angular/common'], factory) :
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/forms'), require('rxjs'), require('rxjs/operators'), require('monaco-editor/esm/vs/editor/editor.api'), require('@angular/common')) :
+    typeof define === 'function' && define.amd ? define('@covalent/code-editor', ['exports', '@angular/core', '@angular/forms', 'rxjs', 'rxjs/operators', 'monaco-editor/esm/vs/editor/editor.api', '@angular/common'], factory) :
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.covalent = global.covalent || {}, global.covalent['code-editor'] = {}), global.ng.core, global.ng.forms, global.rxjs, global.rxjs.operators, global.monaco, global.ng.common));
 }(this, (function (exports, core, forms, rxjs, operators, monaco, common) { 'use strict';
 

@@ -2,7 +2,7 @@ import { EventEmitter, Component, forwardRef, NgZone, ChangeDetectorRef, Element
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject, merge, fromEvent, timer } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { editor, languages } from 'monaco-editor';
+import { editor, languages } from 'monaco-editor/esm/vs/editor/editor.api';
 import { CommonModule } from '@angular/common';
 
 /**
